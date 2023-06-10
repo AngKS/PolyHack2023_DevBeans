@@ -37,28 +37,25 @@ function Content() {
       </div>
 
       <div className="pt-12">
-
-          <div className="text-center">
-            <div className='flex items-center justify-center font-extrabold text-6xl cursor-pointer flex items-center gap-1 mb-5'>
-              <img src={Logo} alt='logo' className='w-16 h-16 mr-1' />
-              <span>Mindful Beans</span>
-            </div>
-            <h1 className="text-6xl font-extrabold leading-tighter tracking-tighter mb-4" data-aos="zoom-y-out">Serenity with every <span className="bg-clip-text text-transparent bg-gradient-to-r from-blue-500 to-teal-400">click</span></h1>
-            <div className="max-w-3xl mx-auto">
-              <p className="text-xl text-gray-600 mb-8" data-aos="zoom-y-out" data-aos-delay="150">Combatting Social Media's Impact on Mental Health and Creating a Safer Community with the <strong>Power of AI</strong></p>
-              <button className="flex items-center justify-center max-w-xs mx-auto text-white text-lg bg-blue-500 w-full py-1 rounded-lg">
-                <img src={Chrome} alt='chrome' className='w-5 h-5 mr-2' />
-                Download Chrome Extension
-              </button>
-            </div>
+        <div className="text-center">
+          <div className='flex items-center justify-center font-extrabold text-6xl cursor-pointer flex items-center gap-1 mb-5'>
+            <img src={Logo} alt='logo' className='w-16 h-16 mr-1' />
+            <span>Mindful Beans</span>
           </div>
-
-          <div className="flex items-center justify-center mt-12">
-            <img src={Landing} alt="landing" className="w-1/2 h-1/2" />
+          <h1 className="text-6xl font-extrabold leading-tighter tracking-tighter mb-4" data-aos="zoom-y-out">Serenity with every <span className="bg-clip-text text-transparent bg-gradient-to-r from-blue-500 to-teal-400">click</span></h1>
+          <div className="max-w-3xl mx-auto">
+            <p className="text-xl text-gray-600 mb-8" data-aos="zoom-y-out" data-aos-delay="150">Combatting Social Media's Impact on Mental Health and Creating a Safer Community with the <strong>Power of AI</strong></p>
+            <button className="flex items-center justify-center max-w-xs mx-auto text-white text-lg bg-blue-500 w-full py-1 rounded-lg">
+              <img src={Chrome} alt='chrome' className='w-5 h-5 mr-2' />
+              Download Chrome Extension
+            </button>
           </div>
         </div>
-      
 
+        <div className="flex items-center justify-center mt-12">
+          <img src={Landing} alt="landing" className="w-1/2 h-1/2" />
+        </div>
+      </div>
     </>
   );
 }

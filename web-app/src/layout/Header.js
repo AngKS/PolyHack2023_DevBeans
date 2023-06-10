@@ -26,8 +26,8 @@ function Header() {
           }
         </div>
       </div>
-      <button className='py-3 px-6 text-white text-md bg-black rounded-full baseline hover:bg-gray-600 md:block'>
-        <a href='/login'>Login</a>
+      <button className='py-3 px-6 text-white text-md bg-black rounded-full baseline hover:bg-gray-600 md:block' onClick={() => navigate('/login')}>
+        Log in
       </button>
     </nav>
   );

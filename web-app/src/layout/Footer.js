@@ -1,6 +1,5 @@
 import React from "react";
 import Logo from "../assets/logo.png";
-import Chrome from "../assets/chrome.png";
 
 function Footer() {
 

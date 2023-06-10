@@ -7,7 +7,7 @@ function Plancard({ name, description, price, features, color, btnText}) {
       style={{ backgroundColor: color }}
       className={
         "flex min-h-[428px] w-[350px] flex-col rounded-3xl p-8" +
-        (name === "Premium" ? " shadow-2xl shadow-cyan-500/50" : " shadow-md")
+        (name === "Premium" ? " shadow-2xl shadow-cyan-500/70" : " shadow-md")
       }
     >
       <h2

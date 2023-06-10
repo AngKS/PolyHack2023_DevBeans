@@ -22,7 +22,7 @@ function Content() {
         </svg>
       </div>
 
-      <div className="pt-32">
+      <div className="pt-12">
 
           <div className="text-center">
             <div className='flex items-center justify-center font-extrabold text-6xl cursor-pointer flex items-center gap-1 mb-5'>
@@ -39,8 +39,8 @@ function Content() {
             </div>
           </div>
 
-          <div className="flex items-center justify-center mt-20">
-            <img src={Landing} alt="landing" />
+          <div className="flex items-center justify-center mt-12">
+            <img src={Landing} alt="landing" className="w-1/2 h-1/2" />
           </div>
 
       </div>

@@ -1,5 +1,6 @@
 import React from "react";
 import Logo from "../assets/logo.png";
+import {Link} from "react-router-dom";
 
 function Footer() {
 
@@ -42,7 +43,7 @@ function Footer() {
             <img src={Logo} alt="logo" className="w-10 h-10 mr-1" />
             <span className="font-extrabold text-2xl">Mindful Beans</span>
           </div>
-          <p class="text-gray-500 mt-2 font-medium text-lg">
+          <p className="text-gray-500 mt-2 font-medium text-lg">
             Serenity with every click.
           </p>
         </div>
@@ -52,12 +53,12 @@ function Footer() {
               {key}
             </h1>
             {data[key].map((item) => (
-              <a
-                href={Object.values(item)}
+              <Link
+                to={Object.values(item)}
                 className="text-gray-500 text-md text-black font-medium hover:text-blue-400 duration-500 my-1"
               >
                 {Object.keys(item)}
-              </a>
+              </Link>
             ))}
           </div>
         ))}

@@ -20,7 +20,7 @@ function App() {
         const supabaseUrl = process.env.REACT_APP_SUPABASE_URL;
         const supabaseKey = process.env.REACT_APP_SUPABASE_ANON_KEY;
         const supabase = createClient(supabaseUrl, supabaseKey);
-        console.log(supabase)
+        // console.log(supabase)
         setSupabaseClient(supabase);
     }
 
@@ -29,18 +29,24 @@ function App() {
     }, [])
 
     return (
-        <Router>
-            <ApplicationContext.Provider
-                value={{ user, setUser, isAuthenticated, setIsAuthenticated, supabaseClient }}
-            >
-                <Routes>
-                    <Route path="/" element={<HomePage />} />
-                    <Route path="/login" element={<LoginPage />} />
-                    <Route path="/pricing" element={<PricingPage />} />
-                    <Route path="/dashboard" element={<DashboardPage />} />
-                </Routes>
-            </ApplicationContext.Provider>
-        </Router>
+      <Router>
+        <ApplicationContext.Provider
+          value={{
+            user,
+            setUser,
+            isAuthenticated,
+            setIsAuthenticated,
+            supabaseClient,
+          }}
+        >
+            <Routes>
+              <Route path="/" element={<HomePage />} />
+              <Route path="/login" element={<LoginPage />} />
+              <Route path="/pricing" element={<PricingPage />} />
+              <Route path="/dashboard" element={<DashboardPage />} />
+            </Routes>
+        </ApplicationContext.Provider>
+      </Router>
     );
 }
 

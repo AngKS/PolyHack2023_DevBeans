@@ -21,14 +21,12 @@ function Plancard({ name, description, price, features, color, btnText}) {
         {name}
       </h2>
       <div className="mb-5 flex items-end text-6xl">
-        {!price && name !== "Free" ? (
-          "Custom"
-        ) : price ? (
+        {price ? (
           <>
             <div>${price}</div>
           </>
         ) : (
-          "Free"
+          "Custom"
         )}
       </div>
       <p className="mb-5">{description}</p>

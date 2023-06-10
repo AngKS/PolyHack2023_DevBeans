@@ -1,0 +1,1 @@
+## Please add 2 files `.env.dev` and `.env.prod` to the `web-app/src/secrets` directory

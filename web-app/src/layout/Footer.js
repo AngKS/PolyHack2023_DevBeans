@@ -34,7 +34,7 @@ function Footer() {
     }
 
   return (
-    <div className="h-full w-full bg-white flex justify-center py-8 ">
+    <div className="h-full w-full bg-white flex flex-col justify-start items-center pt-8 ">
       <div className="grid grid-cols-10 mt-2 place-content-center gap-1 w-full">
         <div className=""></div>
         <div className=""></div>
@@ -46,10 +46,6 @@ function Footer() {
           <p class="text-gray-500 mt-2 font-medium text-lg">
             Serenity with every click.
           </p>
-          <button className="flex items-center justify-center max-w-xs text-white text-md bg-blue-500 w-fit px-2 py-1 mt-3 rounded-lg">
-            <img src={Chrome} alt="chrome" className="w-5 h-5 mr-2" />
-            Download Now
-          </button>
         </div>
         {Object.keys(data).map((key) => (
           <div className="flex flex-col justify-start" key={key}>
@@ -66,6 +62,21 @@ function Footer() {
             ))}
           </div>
         ))}
+      </div>
+
+      <div className="w-full h-fit mx-auto flex justify-center items-center border-t border-gray-300">
+        <div className="font-medium text-sm h-fit my-2">
+          Made with <span className="text-red-500 text-lg">♥️</span> from{" "}
+          <a
+            href="https://github.com/AngKS/PolyHack2023_DevBeans"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="appearance-none underline font-bold"
+          >
+            Singapore
+          </a>
+        </div>
+        
       </div>
     </div>
   );

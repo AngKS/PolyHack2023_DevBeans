@@ -37,9 +37,9 @@ function Plancard({ name, description, price, features, color, btnText}) {
           <li key={feature} className="flex items-center gap-2">
             <svg
               xmlns="http://www.w3.org/2000/svg"
-              className="mr-3 h-7 w-7"
+              className="mr-3 h-7 w-7 mt-2"
               viewBox="0 0 20 20"
-              fill="currentColor"
+              fill={name === "Premium" ? "#3b82f6" : "currentColor"}
             >
               <path
                 fillRule="evenodd"

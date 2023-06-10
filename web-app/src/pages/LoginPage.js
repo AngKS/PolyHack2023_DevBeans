@@ -1,6 +1,7 @@
 import React from "react";
 import { useContext } from "react";
 import { ApplicationContext } from "../contexts/ApplicationContext";
+import Google from '../assets/google.png'
 
 
 function LoginPage() {
@@ -19,20 +20,19 @@ function LoginPage() {
     console.log(error)
   }
 
-    
+
   return (
-    <div>
+    <div className="h-full min-h-screen bg-[#F1FCFE]">
       <h1>Login Page</h1>
       <p>welcome back:{user}</p>
       <div className="max-w-sm">
-        {/* create a login button */}
-        <button
-          className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+        <button 
+          className="flex items-center justify-center max-w-xs mx-auto font-bold text-md w-full py-1 rounded-xl outline-1 outline outline-gray-200 bg-white"
           onClick={handleLogin}
         >
+          <img src={Google} alt='google' className='w-4 h-4 mr-2' />
           Login with Google
         </button>
-
       </div>
     </div>
   );

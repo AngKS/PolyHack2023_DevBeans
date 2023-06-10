@@ -34,7 +34,7 @@ function Footer() {
     }
 
   return (
-    <div className="h-full w-screen bg-white flex justify-center py-8 ">
+    <div className="h-full w-full bg-white flex justify-center py-8 ">
       <div className="grid grid-cols-10 mt-2 place-content-center gap-1 w-full">
         <div className=""></div>
         <div className=""></div>

@@ -1,0 +1,40 @@
+import React from 'react';
+import { useNavigate } from 'react-router-dom';
+import Logo from '../assets/logo.png';
+
+function Header() {
+  const navigate = useNavigate();
+  const Links = [
+    { name: "Features", link: "/" },
+    { name: "Pricing", link: "/pricing" },
+  ];
+
+  return (
+    <nav className='relative container mx-auto p-6'>
+      {/* Flex Container */}
+      <div className='flex items-center justify-between'>
+        {/* Logo */}
+        <div className='font-bold text-2xl cursor-pointer flex items-center gap-1' onClick={() => navigate('/')}>
+          <img src={Logo} alt='logo' className='w-10 h-10 mr-1' />
+          <span>Mindful Beans</span>
+        </div>
+        {/* Menu Items */}
+        <div className='space-x-6 flex mr-20'>
+          {
+            Links.map((link) => (
+              <div className='my-0 font-semibold text-xl' key={ link.name }>
+                <a href={ link.link } className='text-gray-800 hover:text-blue-400 duration-500'>{ link.name }</a>
+              </div>
+            ))
+          }
+        </div>
+        {/* Button */}
+        <button className='p-3 px-6 pt-2 text-white bg-black rounded-full baseline hover:bg-gray-600 md:block'>
+          <a href='/login'>Log in</a>
+        </button>
+      </div>
+    </nav>
+  );
+};
+
+export default Header;

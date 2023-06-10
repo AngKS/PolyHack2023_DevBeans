@@ -1,3 +1,10 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer components {
+  .premium-border {
+    border: 10px solid;
+    border-image: linear-gradient(45deg, rgb(59 130 246), rgb(45 212 191));
+  }
+}

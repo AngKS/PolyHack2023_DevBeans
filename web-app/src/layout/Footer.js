@@ -39,10 +39,10 @@ function Footer() {
         <div className=""></div>
         <div className=""></div>
         <div className="col-span-2 flex flex-col gap-1 justify-start items-start mr-3">
-          <div className="flex justify-start gap-2 items-center">
+          <Link to="/" className="flex justify-start gap-2 items-center">
             <img src={Logo} alt="logo" className="w-10 h-10 mr-1" />
             <span className="font-extrabold text-2xl">Mindful Beans</span>
-          </div>
+          </Link>
           <p className="text-gray-500 mt-2 font-medium text-lg">
             Serenity with every click.
           </p>
@@ -52,12 +52,14 @@ function Footer() {
             <h1 className="font-medium text-md capitalize text-gray-500">
               {key}
             </h1>
+            
             {data[key].map((item) => (
               <Link
-                to={Object.values(item)}
+                to={`${Object.values(item)}`}
                 className="text-gray-500 text-md text-black font-medium hover:text-blue-400 duration-500 my-1"
               >
                 {Object.keys(item)}
+                
               </Link>
             ))}
           </div>

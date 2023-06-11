@@ -4,7 +4,7 @@ import PlanCard from "./PlanCard";
 function Pricing() {
 
   return (
-    <div className="flex flex-row gap-8">
+    <div className="flex flex-row gap-8 px-3">
       <PlanCard 
         // color="#78E3FC"
         color="#FFFFFF" 

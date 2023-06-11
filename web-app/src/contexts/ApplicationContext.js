@@ -4,6 +4,9 @@ export const ApplicationContext = createContext({
     user: null,
     setUser: () => {},
     isAuthenticated: false,
-    setIsAuthenticated: () => {},
+    setIsAuthenticated: () => {
+        // update the user isAuthenticated state
+
+    },
     supabaseClient: null,
 })

@@ -1,7 +1,9 @@
-import React, { useContext } from 'react';
+import React, { useContext, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { ApplicationContext } from "../contexts/ApplicationContext";
 import Logo from '../assets/logo.png';
+import { createClient } from "@supabase/supabase-js";
+
 
 import {
   SlDivider,
@@ -14,7 +16,9 @@ import {
 
 function Header() {
 
-  const { supabaseClient, user } = useContext(ApplicationContext);
+  const { supabaseClient,  setSupabaseClient } = useContext(ApplicationContext);
+
+  // const [user, setUser] = React.useState(null);
 
   const navigate = useNavigate();
   const Links = [
@@ -32,6 +36,25 @@ function Header() {
       window.location.reload();
     }
   };
+
+
+
+const user_item = localStorage.getItem(
+  process.env.REACT_APP_SUPABASE_AUTH_TOKEN_KEY
+);
+
+let user = null;
+
+if (user_item) {
+  let user_data = JSON.parse(user_item);
+  if (user_data.user.aud === "authenticated") {
+    user = {
+      image_url: user_data.user.user_metadata.avatar_url,
+      name: user_data.user.user_metadata.full_name,
+    };
+  }
+}
+
 
 
 

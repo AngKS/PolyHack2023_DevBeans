@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { ApplicationContext } from "../contexts/ApplicationContext";
 import Logo from '../assets/logo.png';

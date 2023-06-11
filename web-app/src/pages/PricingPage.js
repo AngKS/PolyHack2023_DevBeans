@@ -1,4 +1,4 @@
-import React from "react";
+import {React, useEffect} from "react";
 import Header from "../layout/Header";
 import Pricing from "../components/pricing/Pricing";
 import Footer from "../layout/Footer";
@@ -6,6 +6,12 @@ import Chrome from "../assets/chrome.png";
 import bg from "../assets/bg-pattern.png";
 
 function PricingPage() {
+
+  useEffect(() => {
+    // 👇️ scroll to top on page load
+    window.scrollTo({top: 0, left: 0, behavior: 'smooth'});
+  }, []);
+  
   return (
     <div className="h-full min-h-screen bg-[#F1FCFE]">
       <Header />

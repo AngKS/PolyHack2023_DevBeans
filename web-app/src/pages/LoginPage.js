@@ -1,5 +1,5 @@
-import React, {  } from "react";
-import { useContext } from "react";
+import React from "react";
+import { useContext, useEffect } from "react";
 import { ApplicationContext } from "../contexts/ApplicationContext";
 
 import Header from "../layout/Header";
@@ -31,6 +31,10 @@ function LoginPage() {
 
   }
 
+  useEffect(() => {
+    // 👇️ scroll to top on page load
+    window.scrollTo({top: 0, left: 0, behavior: 'smooth'});
+  }, []);
 
   return (
     <div className="flex flex-col justify-between items-center h-full min-h-screen bg-[#F1FCFE]">

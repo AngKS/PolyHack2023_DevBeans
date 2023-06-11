@@ -47,8 +47,6 @@ function App() {
         }
     }, [])
 
-    
-
     return (
       <Router>
         <ApplicationContext.Provider

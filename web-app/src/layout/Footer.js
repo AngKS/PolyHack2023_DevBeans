@@ -35,7 +35,7 @@ function Footer() {
 
   return (
     <div className="h-full w-full bg-white flex flex-col justify-start items-center pt-8 ">
-      <div className="grid grid-cols-10 mt-2 place-content-center gap-1 w-full">
+      <div className="grid grid-cols-10 mt-2 mb-10 place-content-center gap-1 w-full">
         <div className=""></div>
         <div className=""></div>
         <div className="col-span-2 flex flex-col gap-1 justify-start items-start mr-3">
@@ -49,17 +49,16 @@ function Footer() {
         </div>
         {Object.keys(data).map((key) => (
           <div className="flex flex-col justify-start" key={key}>
-            <h1 className="font-medium text-md capitalize text-gray-500">
+            <h1 className="font-medium text-md capitalize text-gray-400 mb-2">
               {key}
             </h1>
-            
+
             {data[key].map((item) => (
               <Link
                 to={`${Object.values(item)}`}
-                className="text-gray-500 text-md text-black font-medium hover:text-blue-400 duration-500 my-1"
+                className="text-gray-500 text-md text-black font-medium pb-2 hover:text-blue-400 duration-500"
               >
                 {Object.keys(item)}
-                
               </Link>
             ))}
           </div>
@@ -78,7 +77,6 @@ function Footer() {
             Singapore
           </a>
         </div>
-        
       </div>
     </div>
   );

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, {  } from "react";
 import { useContext } from "react";
 import { ApplicationContext } from "../contexts/ApplicationContext";
 
@@ -12,17 +12,18 @@ import Video from '../assets/login.mp4'
 
 function LoginPage() {
 
-  const { supabaseClient } = useContext(ApplicationContext)
+
+  const { supabaseClient, setIsAuthenticated } = useContext(ApplicationContext)
 
   const handleLogin = async (event) => {
-
     supabaseClient.auth.signInWithOAuth({
       provider: "google",
       options: {
-        redirectTo: process.env.REACT_APP_PUBLIC_URL+"/pricing",
+        redirectTo: `${process.env.REACT_APP_PUBLIC_URL}`,
       },
-    }).then(async(data) => {
-      
+    }).then((data) => {
+      setIsAuthenticated(true);
+
     })
     .catch((error) => {
       console.log(error)

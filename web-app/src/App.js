@@ -1,5 +1,7 @@
 import "./App.css";
 import React from "react";
+import "@shoelace-style/shoelace/dist/themes/light.css";
+import { setBasePath } from "@shoelace-style/shoelace/dist/utilities/base-path";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import { createClient } from "@supabase/supabase-js";
 
@@ -12,7 +14,7 @@ import { useState, useEffect } from "react";
 import { ApplicationContext } from "./contexts/ApplicationContext";
 
 function App() {
-    const [user, setUser] = useState('abc12345');
+    const [user, setUser] = useState(null);
     const [isAuthenticated, setIsAuthenticated] = useState(false);
     const [supabaseClient, setSupabaseClient] = useState(null);
 
@@ -26,6 +28,23 @@ function App() {
 
     useEffect(() => {
         initSupabase()
+        setBasePath(
+          "https://cdn.jsdelivr.net/npm/@shoelace-style/shoelace@2.4.0/dist/"
+        );
+
+        const user_item = localStorage.getItem(
+          process.env.REACT_APP_SUPABASE_AUTH_TOKEN_KEY
+        );
+
+        if (user_item) {
+          let user_data = JSON.parse(user_item);
+          if (user_data.user.aud === "authenticated") {
+            setUser({
+              image_url: user_data.user.user_metadata.avatar_url,
+              name: user_data.user.user_metadata.full_name,
+            });
+          }
+        }
     }, [])
 
     return (

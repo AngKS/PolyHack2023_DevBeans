@@ -1,37 +1,37 @@
 import React from "react";
 import Logo from "../assets/logo.png";
-import {Link} from "react-router-dom";
+import { Link } from "react-router-dom";
 
 function Footer() {
 
-    let data = {
-        product: [
-            {"Overview": "/"},
-            {"Downloads": "/"},
-            {"Features": "/"},
-            {"Pricing": "/pricing"},
-        ] ,
-        company: [
-            {"About Us": "/"},
-            {"Careers": "/"},
-            {"Press": "/"},
-            {"Media kit": "/"},
-            {"Contact": "/"}
-        ],
-        resources: [
-            {"Blog": "/"},
-            {"Newsletter": "/"},
-            {"Events": "/"},
-            {"Help center": "/"},
-            {"Support": "/"}
-        ],
-        legal: [
-            {"Terms": "/"},
-            {"Privacy": "/"},
-            {"Cookies": "/"},
-            {"Settings": "/"}
-        ]
-    }
+  let data = {
+    product: [
+      { "Overview": "/" },
+      { "Downloads": "/" },
+      { "Features": "/" },
+      { "Pricing": "/pricing" },
+    ],
+    company: [
+      { "About Us": "/" },
+      { "Careers": "/" },
+      { "Press": "/" },
+      { "Media kit": "/" },
+      { "Contact": "/" }
+    ],
+    resources: [
+      { "Blog": "/" },
+      { "Newsletter": "/" },
+      { "Events": "/" },
+      { "Help center": "/" },
+      { "Support": "/" }
+    ],
+    legal: [
+      { "Terms": "/" },
+      { "Privacy": "/" },
+      { "Cookies": "/" },
+      { "Settings": "/" }
+    ]
+  }
 
   return (
     <div className="h-full w-full bg-white flex flex-col justify-start items-center pt-8 ">

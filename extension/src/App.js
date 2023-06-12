@@ -157,7 +157,7 @@ function App() {
                 <AiOutlineCloseCircle className="text-xl cursor-pointer hover:text-gray-400 duration-200" onClick={() => setPage("Login")} />
               </div>
             </div>
-            <div className="w-11/12 mx-auto px-3">
+            <div className="w-11/12 mx-auto px-3 mt-2">
               <div className="flex h-fit">
                 <div className="w-1/3"></div>
                 <div className="w-1/3 text-center font-bold flex items-center">
@@ -174,7 +174,7 @@ function App() {
                 </div>
               </div>
             </div>
-            <div className="w-11/12 mx-auto px-3 mt-2">
+            <div className="w-11/12 mx-auto px-3 mt-6">
               <div className="flex justify-between mb-2">
                 <div>
                   <div className="font-bold text-2xl">
@@ -204,11 +204,6 @@ function App() {
                     <div className="w-11 h-6 bg-gray-200 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-teal-400"></div>
                   </label>
                 </div>
-              </div>
-            </div>
-            <div className="w-11/12 mx-auto">
-              <div className="bg-website-section text-website-section-head font-bold mx-3 px-2 py-1">
-                Settings
               </div>
             </div>
           </>

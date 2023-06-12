@@ -1,6 +1,1 @@
-// Send a message to the background script
-chrome.runtime.sendMessage({ greeting: "Hello from content script!" });
-
-chrome.storage.local.set({ "lol": "ok" }).then(() => {
-    console.log("Value is set");
-  });
+chrome.runtime.sendMessage({greeting:"Hello from content script!"}),chrome.storage.local.set({lol:"ok"}).then((()=>{console.log("Value is set")}));

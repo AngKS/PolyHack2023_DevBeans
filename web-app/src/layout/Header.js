@@ -15,10 +15,7 @@ import {
 } from "@shoelace-style/shoelace/dist/react";
 
 function Header() {
-
-  const { supabaseClient,  setSupabaseClient } = useContext(ApplicationContext);
-
-  // const [user, setUser] = React.useState(null);
+  const { supabaseClient, setSupabaseClient } = useContext(ApplicationContext);
 
   const navigate = useNavigate();
   const Links = [
@@ -32,31 +29,25 @@ function Header() {
       console.log(error);
     } else {
       localStorage.removeItem(process.env.REACT_APP_SUPABASE_AUTH_TOKEN_KEY);
-      // refresh the page
       window.location.reload();
     }
   };
 
+  const user_item = localStorage.getItem(
+    process.env.REACT_APP_SUPABASE_AUTH_TOKEN_KEY
+  );
 
+  let user = null;
 
-const user_item = localStorage.getItem(
-  process.env.REACT_APP_SUPABASE_AUTH_TOKEN_KEY
-);
-
-let user = null;
-
-if (user_item) {
-  let user_data = JSON.parse(user_item);
-  if (user_data.user.aud === "authenticated") {
-    user = {
-      image_url: user_data.user.user_metadata.avatar_url,
-      name: user_data.user.user_metadata.full_name,
-    };
+  if (user_item) {
+    let user_data = JSON.parse(user_item);
+    if (user_data.user.aud === "authenticated") {
+      user = {
+        image_url: user_data.user.user_metadata.avatar_url,
+        name: user_data.user.user_metadata.full_name,
+      };
+    }
   }
-}
-
-
-
 
   return (
     <nav className="flex items-center justify-between relative container mx-auto p-6">
@@ -82,7 +73,7 @@ if (user_item) {
         </div>
       </div>
       {user !== null ? (
-        <div className="flex items-center">
+        <div className="flex items-center cursor-pointer">
           <SlDropdown
             placement="bottom-end"
             className="w-full"
@@ -98,7 +89,7 @@ if (user_item) {
             ></SlAvatar>
 
             <SlMenu className="font-medium text-lg">
-              <SlMenuItem>
+              <SlMenuItem onClick={() => navigate("/dashboard")}>
                 Dashboard
                 <SlIcon slot="prefix" name="activity" />
               </SlMenuItem>
@@ -118,19 +109,6 @@ if (user_item) {
             </SlMenu>
           </SlDropdown>
 
-          {/* <div className="flex items-center gap-4 ml-4">
-            <button className="bg-blue-400 hover:bg-blue-500 text-white font-semibold py-2 px-6 rounded-full">
-              <Link to="/dashboard">Dashboard</Link>
-            </button>
-            <button
-              className="py-2 px-6 text-white text-md bg-black rounded-full baseline hover:bg-gray-600 md:block"
-              onClick={() => {
-                handleLogout();
-              }}
-            >
-              Log out
-            </button>
-          </div> */}
         </div>
       ) : (
         <Link

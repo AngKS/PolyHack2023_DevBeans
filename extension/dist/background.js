@@ -1,6 +1,3 @@
-<<<<<<< HEAD
-chrome.runtime.onMessage.addListener((function(e,n,o){console.log(e.greeting)}));
-=======
 // // Listen for messages from the content script
 // chrome.runtime.onMessage.addListener(function (message, sender, sendResponse) {
 //     console.log(message.greeting); // Outputs: "Hello from content script!"
@@ -42,4 +39,3 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
   }
 });
 
->>>>>>> e645bc5fd80e0b6316dbb68f2539a991c35f8b6f

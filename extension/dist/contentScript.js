@@ -1,6 +1,3 @@
-<<<<<<< HEAD
-chrome.runtime.sendMessage({greeting:"Hello from content script!"}),chrome.storage.local.set({lol:"ok"}).then((()=>{console.log("Value is set")}));
-=======
 console.log("content")
 // Function to scrape the page content
 function scrapePageContent() {
@@ -18,4 +15,3 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
     scrapePageContent();
   }
 });
->>>>>>> e645bc5fd80e0b6316dbb68f2539a991c35f8b6f

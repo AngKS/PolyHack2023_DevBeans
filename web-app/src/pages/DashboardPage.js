@@ -1,8 +1,7 @@
 import {React, useEffect} from "react";
 import Header from "../layout/Header";
 import Footer from "../layout/Footer";
-import MetricCard from "../components/dashboard/MetricCard";
-import PieChart from "../components/dashboard/PieChart";
+import { SlButton } from "@shoelace-style/shoelace/dist/react";
 
 function DashboardPage() {
 
@@ -13,11 +12,7 @@ function DashboardPage() {
   return (
     <div className="flex flex-col justify-between items-center h-full min-h-screen bg-[#F1FCFE]">
       <Header />
-      <MetricCard title="Testing" extra="px-6">
-        <div className="w-full">
-          <PieChart />
-        </div>
-      </MetricCard>
+      <SlButton variant="primary">Click me</SlButton>;
       <Footer />
     </div>
   );

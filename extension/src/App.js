@@ -9,6 +9,10 @@ import { FcGoogle } from "react-icons/fc";
 function App() {
     const [page, setPage] = useState("Login");
 
+    const signIn = () => {
+      chrome.tabs.create({ url: 'https://uippnkhijtqmwnwnnypz.supabase.co/auth/v1/authorize?provider=google' });
+    };
+
     const Default_Page = (
         <>
             <div className="topNav w-11/12 mx-auto py-4 px-3 flex">
@@ -259,7 +263,7 @@ function App() {
             <div className="my-16">
                 <div
                     className="flex items-center w-4/5 mx-auto justify-center bg-gradient-to-r from-blue-500 to-teal-400 border-gradient-to-r border from-blue-500 to-teal-400 p-0.5 cursor-pointer"
-                    onClick={() => setPage("Default")}
+                    onClick={signIn}
                 >
                     <div className="w-full h-full bg-white flex items-center justify-center py-2 px-4 text-xl">
                         <div className="flex items-center">

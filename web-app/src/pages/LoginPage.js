@@ -19,7 +19,7 @@ function LoginPage() {
     supabaseClient.auth.signInWithOAuth({
       provider: "google",
       options: {
-        redirectTo: `${process.env.REACT_APP_PUBLIC_URL}`,
+        redirectTo: `${process.env.REACT_APP_PUBLIC_URL}/dashboard`,
       },
     }).then((data) => {
       setIsAuthenticated(true);

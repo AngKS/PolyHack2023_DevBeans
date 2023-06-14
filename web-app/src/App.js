@@ -9,6 +9,7 @@ import HomePage from "./pages/HomePage";
 import LoginPage from "./pages/LoginPage";
 import PricingPage from "./pages/PricingPage";
 import DashboardPage from "./pages/DashboardPage";
+import SuccessLoginPage from "./pages/SuccessLoginPage";
 
 import { useState, useEffect } from "react";
 import { ApplicationContext } from "./contexts/ApplicationContext";
@@ -63,6 +64,7 @@ function App() {
               <Route path="/login" element={<LoginPage />} />
               <Route path="/pricing" element={<PricingPage />} />
               <Route path="/dashboard" element={<DashboardPage />} />
+              <Route path="/success" element={<SuccessLoginPage />} />
             </Routes>
         </ApplicationContext.Provider>
       </Router>

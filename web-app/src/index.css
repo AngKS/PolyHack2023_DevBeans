@@ -1,3 +1,8 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+sl-avatar {
+    --size: 2rem;
+    /* background */
+}

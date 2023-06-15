@@ -2,7 +2,6 @@ import React, { useContext, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { ApplicationContext } from "../contexts/ApplicationContext";
 import Logo from '../assets/logo.png';
-import { createClient } from "@supabase/supabase-js";
 
 
 import {
@@ -14,8 +13,8 @@ import {
   SlAvatar,
 } from "@shoelace-style/shoelace/dist/react";
 
-function Header() {
-  const { supabaseClient, setSupabaseClient } = useContext(ApplicationContext);
+function Header({dashboard}) {
+  const { supabaseClient } = useContext(ApplicationContext);
 
   const navigate = useNavigate();
   const Links = [
@@ -47,6 +46,9 @@ function Header() {
         name: user_data.user.user_metadata.full_name,
       };
     }
+    else{
+      navigate("/login")
+    }
   }
 
   return (
@@ -59,21 +61,33 @@ function Header() {
           <img src={Logo} alt="logo" className="w-10 h-10 mr-1" />
           <span>Mindful Beans</span>
         </div>
-        <div className="space-x-6 flex ml-10 mt-1">
-          {Links.map((link) => (
-            <div className="my-0 font-semibold text-xl" key={link.name}>
-              <Link
-                to={link.link}
-                className="text-gray-800 hover:text-blue-400 duration-500"
-              >
-                {link.name}
-              </Link>
+        {
+          dashboard ? (
+            <div className="space-x-6 flex ml-10 mt-1">
             </div>
-          ))}
-        </div>
+          ) : (
+            <div className="space-x-6 flex ml-10 mt-1">
+            {Links.map((link) => (
+              <div className="my-0 font-semibold text-xl" key={link.name}>
+                <Link
+                  to={link.link}
+                  className="text-gray-800 hover:text-blue-400 duration-500"
+                >
+                  {link.name}
+                </Link>
+              </div>
+            ))}
+          </div>
+          )
+        }
       </div>
       {user !== null ? (
-        <div className="flex items-center cursor-pointer">
+        <div className="flex items-center cursor-pointer gap-2">
+          <button
+            className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 duration-500"
+            onClick={() => navigate("/dashboard")}
+
+          >Dashboard</button>
           <SlDropdown
             placement="bottom-end"
             className="w-full"
@@ -82,17 +96,13 @@ function Header() {
               input.show();
             }}
           >
-            <SlAvatar
-              image={user.image_url}
-              label="avatar"
-              slot="trigger"
-            ></SlAvatar>
+            <div slot="trigger" className="flex items-center gap-2">
+              <SlAvatar image={user.image_url} label="avatar"></SlAvatar>
+              <span className="text-xl font-semibold">{user.name}</span>
+            </div>
 
             <SlMenu className="font-medium text-lg">
-              <SlMenuItem onClick={() => navigate("/dashboard")}>
-                Dashboard
-                <SlIcon slot="prefix" name="activity" />
-              </SlMenuItem>
+
               <SlMenuItem>
                 Settings
                 <SlIcon slot="prefix" name="gear-wide-connected" />
@@ -108,7 +118,6 @@ function Header() {
               </SlMenuItem>
             </SlMenu>
           </SlDropdown>
-
         </div>
       ) : (
         <Link

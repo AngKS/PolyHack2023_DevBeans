@@ -11,11 +11,10 @@ function SuccessLoginPage() {
   return (
     <div className="flex flex-col justify-between items-center h-full min-h-screen bg-[#F1FCFE]">
       <Header />
+
       <section className="text-center">
-            <h1>You've successfully logged in.</h1>
-            
+        <h1>You've successfully logged in.</h1>
       </section>
-      <Footer />
     </div>
   );
 }

@@ -11,6 +11,10 @@ import PricingPage from "./pages/PricingPage";
 import DashboardPage from "./pages/DashboardPage";
 import SuccessLoginPage from "./pages/SuccessLoginPage";
 
+// import Header from "./layout/Header";
+import Footer from "./layout/Footer";
+
+
 import { useState, useEffect } from "react";
 import { ApplicationContext } from "./contexts/ApplicationContext";
 
@@ -49,7 +53,7 @@ function App() {
     }, [])
 
     return (
-      <Router>
+      <Router className="min-h-screen">
         <ApplicationContext.Provider
           value={{
             user,
@@ -60,12 +64,13 @@ function App() {
           }}
         >
             <Routes>
-              <Route path="/" element={<HomePage />} />
+              <Route path="/" default element={<HomePage />} />
               <Route path="/login" element={<LoginPage />} />
               <Route path="/pricing" element={<PricingPage />} />
               <Route path="/dashboard" element={<DashboardPage />} />
               <Route path="/success" element={<SuccessLoginPage />} />
             </Routes>
+            <Footer />
         </ApplicationContext.Provider>
       </Router>
     );

@@ -39,6 +39,7 @@ function LoginPage() {
   return (
     <div className="flex flex-col justify-between items-center h-full min-h-screen bg-[#F1FCFE]">
       <Header />
+
       <section className="min-h-screen h-full w-full flex items-center justify-center">
         <div className="flex min-h-[428px] w-1/2 flex-col justify-center align-center outline outline-1 outline-gray-300 rounded-2xl bg-white mx-auto px-10 py-8">
           <span className="text-3xl font-bold text-center">Welcome Back</span>
@@ -70,7 +71,6 @@ function LoginPage() {
           </div>
         </div>
       </section>
-      <Footer />
     </div>
   );
 }

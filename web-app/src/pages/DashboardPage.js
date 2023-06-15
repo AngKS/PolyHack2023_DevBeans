@@ -3,10 +3,11 @@ import { useNavigate, Link } from "react-router-dom";
 
 import Header from "../layout/Header";
 import MetricCard from "../components/dashboard/MetricCard";
-import Widgets from "../components/dashboard/Widgets";
 import Charts from "../components/dashboard/Charts";
 import HistoryTable from "../components/dashboard/HistoryTable";
 import TopicViewWidget from "../components/dashboard/TopicViewWidget";
+import CensoredDataWidget from "../components/dashboard/CensoredDataPieChart";
+import SmartWidget from "../components/dashboard/SmartWidget";
 
 function DashboardPage() {
   const navigate = useNavigate();
@@ -23,11 +24,10 @@ function DashboardPage() {
         name: user_data.user.user_metadata.full_name,
       };
     }
-    else{
-      navigate("/login")
-    }
+  } 
+  else {
+    navigate("/login");
   }
-
 
   const [customHeight, setCustomHeight] = useState(0);
   const knownSites = [
@@ -157,39 +157,35 @@ function DashboardPage() {
           title="Smart Recommendations"
           extra="px-6 lg:col-span-3 sm:auto-cols-auto row-span-1"
         >
-          <p className="text-slate-700">
-            Lorem ipsum dolor sit, amet consectetur adipisicing elit. Mollitia
-            reiciendis similique expedita adipisci ut, veniam omnis quae unde
-            dignissimos? Nulla nihil dolore, blanditiis nisi a laudantium facere
-            commodi recusandae dolor! Lorem ipsum dolor sit, amet consectetur
-            adipisicing elit. Mollitia reiciendis similique expedita adipisci
-            ut, veniam omnis quae unde dignissimos? Nulla nihil dolore,
-            blanditiis nisi a laudantium facere commodi recusandae dolor!
-          </p>
+          <SmartWidget />
         </MetricCard>
         <MetricCard
-          title="% Censored Data"
+          title="(%) Censored Data"
           extra="px-6 lg:col-span-3 sm:auto-cols-auto row-span-1"
-        ></MetricCard>
+        >
+          <CensoredDataWidget censored_content_count={33} />
+        </MetricCard>
 
         <MetricCard
           title="Topic most Viewed"
           extra="px-6 lg:col-span-3 sm:auto-cols-auto row-span-1"
         >
-            <TopicViewWidget topics={[
+          <TopicViewWidget
+            topics={[
               {
                 name: "Politics",
-                count: 10
+                count: 10,
               },
               {
                 name: "Sports",
-                count: 10
+                count: 10,
               },
               {
                 name: "Entertainment",
-                count: 10
+                count: 10,
               },
-            ]}/>
+            ]}
+          />
         </MetricCard>
         <MetricCard
           title="Kind'O Matic"
@@ -202,11 +198,7 @@ function DashboardPage() {
           title="Recent Site History"
           extra="px-6 lg:col-span-5 sm:auto-cols-auto row-span-4"
         >
-          <HistoryTable 
-            websiteVisited={websiteVisited}
-
-          >
-          </HistoryTable>
+          <HistoryTable websiteVisited={websiteVisited}></HistoryTable>
         </MetricCard>
         <MetricCard
           title=""

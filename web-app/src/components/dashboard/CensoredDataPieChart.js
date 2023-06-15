@@ -17,29 +17,11 @@ const data = {
     },
   ],
 };
-const CensoredDataWidget = () => {
+const CensoredDataWidget = ({ censored_content_count, total_count }) => {
   return (
-    <div className="h-full w-auto">
-      <Doughnut
-        data={data}
-        options={{
-          ...chartOptions,
-          responsive: true,
-          labels: false,
-          scales: {
-            xAxes: [
-              {
-                display: false,
-              },
-            ],
-            yAxes: [
-              {
-                display: false,
-              },
-            ],
-          },
-        }}
-      />
+    <div className="h-full w-auto flex justify-end items-end">
+        <span className="text-7xl font-bold text-sky-700">{censored_content_count}%</span>
+        <span className="text-sm ml-2 font-medium text-slate-500">contents censored.</span>
     </div>
   );
 };

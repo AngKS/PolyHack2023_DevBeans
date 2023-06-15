@@ -5,12 +5,28 @@ import {
   SlTabGroup,
   SlTabPanel,
 } from "@shoelace-style/shoelace/dist/react";
+import LineChart from "./LineChart";
+import PieChart from "./PieChart";
 
 const Charts = () => {
   return (
-    <SlTabGroup>
-        <SlTab></SlTab>
+    <SlTabGroup
+        
+    >
+      <SlTab active slot="nav" panel="topics-censored">
+        Topics Censored over time
+      </SlTab>
+      <SlTab slot="nav" panel="site-most-visited">
+        Websites most visited
+      </SlTab>
 
+
+      <sl-tab-panel active name="topics-censored">
+        <LineChart />
+      </sl-tab-panel>
+      <sl-tab-panel name="site-most-visited">
+        <PieChart />
+      </sl-tab-panel>
     </SlTabGroup>
   );
 };

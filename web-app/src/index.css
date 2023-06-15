@@ -3,6 +3,6 @@
 @tailwind utilities;
 
 sl-avatar {
-    --size: 2rem;
+    --size: 2.5rem;
     /* background */
 }

@@ -18,16 +18,21 @@ function MetricCard(props) {
 
   return (
     <div
-      className={`!z-5 h-full max-h-inherit relative flex flex-col py-4 rounded-[20px] bg-slate-100 bg-clip-border shadow ${extra}`}
+      className={`!z-5 h-full relative flex flex-col py-4 rounded-[20px] bg-slate-100 bg-clip-border shadow ${extra}`}
       {...attr}
     >
       <div className="relative flex items-center justify-between">
-        <div className="text-md font-medium text-navy-600 dark:text-white">
+        <div className="text-lg text-navy-600 w-full dark:text-white">
           {title}
         </div>
       </div>
       <></>
-      <div ref={cardRef}  className={`flex-grow bg-red-500 max-h-[${ogHeight}] h-full overflow-y-scroll`}>{children}</div>
+      <div
+        ref={cardRef}
+        className={`flex-grow h-inherit overflow-y-scroll`}
+      >
+        {children}
+      </div>
     </div>
   );
 }

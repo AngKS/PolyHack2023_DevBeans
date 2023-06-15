@@ -28,7 +28,7 @@ function Header({dashboard}) {
       console.log(error);
     } else {
       localStorage.removeItem(process.env.REACT_APP_SUPABASE_AUTH_TOKEN_KEY);
-      window.location.reload();
+      navigate("/");
     }
   };
 
@@ -52,7 +52,10 @@ function Header({dashboard}) {
   }
 
   return (
-    <nav className="flex items-center justify-between relative container mx-auto p-6">
+    <nav
+      id="navbar"
+      className="flex items-center justify-between relative container mx-auto p-6"
+    >
       <div className="flex items-center">
         <div
           className="font-bold text-2xl cursor-pointer flex items-center gap-1"
@@ -61,12 +64,10 @@ function Header({dashboard}) {
           <img src={Logo} alt="logo" className="w-10 h-10 mr-1" />
           <span>Mindful Beans</span>
         </div>
-        {
-          dashboard ? (
-            <div className="space-x-6 flex ml-10 mt-1">
-            </div>
-          ) : (
-            <div className="space-x-6 flex ml-10 mt-1">
+        {dashboard ? (
+          <div className="space-x-6 flex ml-10 mt-1"></div>
+        ) : (
+          <div className="space-x-6 flex ml-10 mt-1">
             {Links.map((link) => (
               <div className="my-0 font-semibold text-xl" key={link.name}>
                 <Link
@@ -78,16 +79,16 @@ function Header({dashboard}) {
               </div>
             ))}
           </div>
-          )
-        }
+        )}
       </div>
       {user !== null ? (
         <div className="flex items-center cursor-pointer gap-2">
           <button
             className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 duration-500"
             onClick={() => navigate("/dashboard")}
-
-          >Dashboard</button>
+          >
+            Dashboard
+          </button>
           <SlDropdown
             placement="bottom-end"
             className="w-full"
@@ -98,11 +99,13 @@ function Header({dashboard}) {
           >
             <div slot="trigger" className="flex items-center gap-2">
               <SlAvatar image={user.image_url} label="avatar"></SlAvatar>
-              <span className="text-xl font-semibold">{user.name}</span>
+              <div className="flex flex-col">
+                  <span className="text-sm font-medium text-slate-500">Welcome back</span>
+                <span className="text-xl font-semibold">{user.name}</span>
+              </div>
             </div>
 
             <SlMenu className="font-medium text-lg">
-
               <SlMenuItem>
                 Settings
                 <SlIcon slot="prefix" name="gear-wide-connected" />

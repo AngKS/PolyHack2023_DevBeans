@@ -2,23 +2,18 @@ import {React, useEffect, useState} from "react";
 import { useNavigate, Link } from "react-router-dom";
 
 import Header from "../layout/Header";
-import Footer from "../layout/Footer";
 import MetricCard from "../components/dashboard/MetricCard";
-import PieChart from "../components/dashboard/PieChart";
-import LineChart from "../components/dashboard/LineChart";
 import Widgets from "../components/dashboard/Widgets";
-import { SlBadge, SlButton, SlIcon } from "@shoelace-style/shoelace/dist/react";
 import Charts from "../components/dashboard/Charts";
+import HistoryTable from "../components/dashboard/HistoryTable";
+import TopicViewWidget from "../components/dashboard/TopicViewWidget";
 
 function DashboardPage() {
   const navigate = useNavigate();
   let user = null;
-
-
   const user_item = localStorage.getItem(
     process.env.REACT_APP_SUPABASE_AUTH_TOKEN_KEY
   );
-
 
   if (user_item) {
     let user_data = JSON.parse(user_item);
@@ -144,7 +139,6 @@ function DashboardPage() {
     const header_height = document.getElementById("navbar").clientHeight;
     // get screenHeigh
     const screenHeight = window.innerHeight;
-
     setCustomHeight(screenHeight - header_height);
 
   }, []);
@@ -160,17 +154,18 @@ function DashboardPage() {
       >
         {/* top level insights/metrics */}
         <MetricCard
-          title="Smart Analytics"
+          title="Smart Recommendations"
           extra="px-6 lg:col-span-3 sm:auto-cols-auto row-span-1"
         >
-          Lorem ipsum dolor sit, amet consectetur adipisicing elit. Mollitia
-          reiciendis similique expedita adipisci ut, veniam omnis quae unde
-          dignissimos? Nulla nihil dolore, blanditiis nisi a laudantium facere
-          commodi recusandae dolor!
-          Lorem ipsum dolor sit, amet consectetur adipisicing elit. Mollitia
-          reiciendis similique expedita adipisci ut, veniam omnis quae unde
-          dignissimos? Nulla nihil dolore, blanditiis nisi a laudantium facere
-          commodi recusandae dolor!
+          <p className="text-slate-700">
+            Lorem ipsum dolor sit, amet consectetur adipisicing elit. Mollitia
+            reiciendis similique expedita adipisci ut, veniam omnis quae unde
+            dignissimos? Nulla nihil dolore, blanditiis nisi a laudantium facere
+            commodi recusandae dolor! Lorem ipsum dolor sit, amet consectetur
+            adipisicing elit. Mollitia reiciendis similique expedita adipisci
+            ut, veniam omnis quae unde dignissimos? Nulla nihil dolore,
+            blanditiis nisi a laudantium facere commodi recusandae dolor!
+          </p>
         </MetricCard>
         <MetricCard
           title="% Censored Data"
@@ -178,9 +173,24 @@ function DashboardPage() {
         ></MetricCard>
 
         <MetricCard
-          title="Topics most Viewed"
+          title="Topic most Viewed"
           extra="px-6 lg:col-span-3 sm:auto-cols-auto row-span-1"
-        ></MetricCard>
+        >
+            <TopicViewWidget topics={[
+              {
+                name: "Politics",
+                count: 10
+              },
+              {
+                name: "Sports",
+                count: 10
+              },
+              {
+                name: "Entertainment",
+                count: 10
+              },
+            ]}/>
+        </MetricCard>
         <MetricCard
           title="Kind'O Matic"
           extra="px-6 lg:col-span-3 sm:auto-cols-auto row-span-1"
@@ -192,56 +202,17 @@ function DashboardPage() {
           title="Recent Site History"
           extra="px-6 lg:col-span-5 sm:auto-cols-auto row-span-4"
         >
-          <table
-            className="table-auto w-full"
-          >
-            <thead>
-              <tr className="">
-                <th className="py-2 w-fit px-1 text-start text-slate-700 text-sm font-medium ">Site URL</th>
-                <th className="py-2 w-fit px-1 text-start text-slate-700 text-sm font-medium ">Topic</th>
-                <th className="py-2 w-fit px-1 text-start text-slate-700 text-sm font-medium ">Last visited</th>
-              </tr>
-            </thead>
-            <tbody>
-              {
-                websiteVisited.map((item, key) => {
-                  return (
-                    <tr key={key} className="border-b border-slate-200 px-3 py-2">
-                      <td className="py-2 px-1 text-slate-500 font-medium ">
-                        <SlButton
-                          variant="text"
-                          size="small"
-                          onClick={() => {}}
-                        >
-                          <SlIcon slot="prefix" name="globe"></SlIcon>
-                          {item.url}
-                        </SlButton>
-                      </td>
-                      <td className="py-2 px-1 text-slate-700 font-medium ">
-                        {item.topics.map((topic, key) => {
-                          return (
-                            <SlBadge key={key} variant="primary" pill>
-                              {topic}
-                            </SlBadge>
-                          );
-                        })}
-                      </td>
-                      <td className="py-2 px-1 text-slate-500 text-sm ">
-                        {item.last_visited}
-                      </td>
-                    </tr>
-                  );
+          <HistoryTable 
+            websiteVisited={websiteVisited}
 
-                })
-              }
-            </tbody>
-          </table>
+          >
+          </HistoryTable>
         </MetricCard>
         <MetricCard
           title=""
           extra="px-6 lg:col-span-7 sm:auto-cols-auto row-span-4"
         >
-            <Charts />
+          <Charts />
         </MetricCard>
       </section>
     </div>

@@ -22,7 +22,7 @@ function MetricCard(props) {
       {...attr}
     >
       <div className="relative flex items-center justify-between">
-        <div className="text-lg text-navy-600 w-full dark:text-white">
+        <div className="text-sm font-semibold text-black w-full dark:text-white">
           {title}
         </div>
       </div>

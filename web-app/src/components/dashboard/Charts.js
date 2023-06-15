@@ -17,9 +17,8 @@ const Charts = () => {
         Topics Censored over time
       </SlTab>
       <SlTab slot="nav" panel="site-most-visited">
-        Websites most visited
+        Frequently Visited Sites
       </SlTab>
-
 
       <sl-tab-panel active name="topics-censored">
         <LineChart />

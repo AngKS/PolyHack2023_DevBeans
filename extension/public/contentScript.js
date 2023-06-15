@@ -10,6 +10,7 @@ overlayButton.style.padding = '5px 10px';
 overlayButton.style.borderRadius = '5px';
 overlayButton.style.cursor = 'pointer'; // makes it clear it's a clickable button
 overlayButton.style.display = 'none'; // Initially hidden
+overlayButton.setAttribute('data-state', 'idle'); // Set initial state as idle
 
 overlayButton.addEventListener('click', () => {
   // Actions on button click here
@@ -31,6 +32,35 @@ function positionOverlayButton(inputElement) {
     overlayButton.style.left = `${rect.left + window.scrollX}px`;
   }
 }
+
+// Add a function to update the button state
+function updateButtonState(state, suggestions = []) {
+  overlayButton.setAttribute('data-state', state);
+  if(state === 'suggestions') {
+    // Create suggestion elements (for example, as list items in a dropdown)
+    let dropdown = document.createElement('div');
+    dropdown.className = 'suggestion-dropdown';
+    suggestions.forEach(suggestion => {
+      let listItem = document.createElement('p');
+      listItem.innerText = suggestion;
+      dropdown.appendChild(listItem);
+    });
+    overlayButton.appendChild(dropdown);
+  }
+  if (state === 'success') {
+    overlayButton.innerText = 'Success!';
+  }
+  if (state === 'processing') {
+    overlayButton.innerText = 'Processing...';
+  }
+}
+
+// Listen for state changes from the background script
+chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
+  if(request.action === 'updateButtonState') {
+    updateButtonState(request.state, request.suggestions);
+  }
+});
 
 // Capture user inputs and handle the overlay button
 function captureUserInputs_() {
@@ -75,8 +105,6 @@ function captureUserInputs() {
     positionOverlayButton(activeElement);
   });
 }
-
-
 
 // Call the captureUserInputs function at the start to handle any already existing inputs
 captureUserInputs();

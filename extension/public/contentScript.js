@@ -1,56 +1,93 @@
-const observer = new MutationObserver(function (mutationsList) {
-  for (const mutation of mutationsList) {
-    // Check if the mutation type is 'childList' (indicating a change in child nodes)
-    if (mutation.type === 'childList') {
-      // Get the updated page content
-      const pageContent = document.documentElement.innerText;
-      chrome.runtime.sendMessage({ content: pageContent });
-      
-      // Capture and log the user's inputs
-      captureUserInputs();
-    }
-  }
+// Create an overlay button when the script runs
+const overlayButton = document.createElement('button');
+overlayButton.innerText = 'Overlay';
+overlayButton.style.position = 'absolute';
+overlayButton.style.zIndex = '2147483647'; // max z-index value
+overlayButton.style.background = '#000';
+overlayButton.style.color = '#fff';
+overlayButton.style.border = 'none';
+overlayButton.style.padding = '5px 10px';
+overlayButton.style.borderRadius = '5px';
+overlayButton.style.cursor = 'pointer'; // makes it clear it's a clickable button
+overlayButton.style.display = 'none'; // Initially hidden
+
+overlayButton.addEventListener('click', () => {
+  // Actions on button click here
+  chrome.runtime.sendMessage({ action: "overlayClicked" });
 });
 
-observer.observe(document, { childList: true, subtree: true });
+document.body.appendChild(overlayButton);
 
-function retrieveLocalStorageData() {
-  if (window.location.hostname == "mindful-beans.netlify.app") {
-    if (localStorage.length > 0) {
-      console.log('Retrieved data from extension storage:', localStorage);
-      chrome.runtime.sendMessage({ localStorageData: localStorage, website: window.location.hostname });
-    } else {
-      setTimeout(retrieveLocalStorageData, 500);
-    }
+// Position the overlay button relative to a given input element
+function positionOverlayButton(inputElement) {
+  const rect = inputElement.getBoundingClientRect();
+  const viewportHeight = window.innerHeight || document.documentElement.clientHeight;
+
+  if (rect.top < viewportHeight / 2) {  // if the input box is in the top half of the screen
+    overlayButton.style.top = `${rect.bottom + window.scrollY}px`;
+    overlayButton.style.left = `${rect.left + window.scrollX}px`;
+  } else {  // if the input box is in the bottom half of the screen
+    overlayButton.style.top = `${rect.top + window.scrollY - overlayButton.offsetHeight}px`;
+    overlayButton.style.left = `${rect.left + window.scrollX}px`;
   }
-};
+}
 
-// Function to capture and log the user's inputs
-function captureUserInputs() {
-  // Get all input and textarea elements on the page
-  const inputs = document.querySelectorAll('input, textarea');
-
-  // Iterate over each input and textarea element
+// Capture user inputs and handle the overlay button
+function captureUserInputs_() {
+  const inputs = document.querySelectorAll('input, textarea, [contenteditable="true"]');
   for (let i = 0; i < inputs.length; i++) {
-    // Check if we've already added an event listener to this element
     if (inputs[i].dataset.listening !== 'true') {
-      // Add an event listener to capture the input's value every time it is changed
       inputs[i].addEventListener('input', function(event) {
-        // Get the value of the input element
-        const inputValue = event.target.value;
+        let inputValue = '';
 
-        // Send a message to the background script to log the input value
+        // Check if the input is a contenteditable field
+        if (this.getAttribute('contenteditable') === 'true') {
+          inputValue = this.innerText;
+        } else {
+          inputValue = this.value;
+        }
+
         chrome.runtime.sendMessage({ action: "logInput", inputValue: inputValue });
       });
 
-      // Mark the input as having an event listener
+      // Show the overlay button when the input element is focused
+      inputs[i].addEventListener('focus', function() {
+        overlayButton.style.display = 'block';
+        positionOverlayButton(this);
+      });
+
       inputs[i].dataset.listening = 'true';
     }
   }
 }
+
+// Capture user inputs and handle the overlay button
+function captureUserInputs() {
+  document.addEventListener('keydown', function(event) {
+    const activeElement = document.activeElement;
+    const inputValue = activeElement.innerText || activeElement.value;
+
+    // Send a message to the background script
+    chrome.runtime.sendMessage({ action: "logInput", inputValue: inputValue });
+
+    // Show the overlay button and position it
+    overlayButton.style.display = 'block';
+    positionOverlayButton(activeElement);
+  });
+}
+
+
 
 // Call the captureUserInputs function at the start to handle any already existing inputs
 captureUserInputs();
 
 // Call the retrieveLocalStorageData function
 retrieveLocalStorageData();
+
+// Handle window resize events
+window.addEventListener('resize', () => {
+  const activeElement = document.activeElement;
+  if (activeElement && (activeElement.tagName.toLowerCase() === 'input' || activeElement.tagName.toLowerCase() === 'textarea')) {
+    positionOverlayButton(activeElement);
+  }
+});

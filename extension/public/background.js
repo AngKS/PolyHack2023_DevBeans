@@ -13,6 +13,15 @@
 let timeoutId = null;
 
 chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
+
+  console.log('Received message:', request);
+
+  
+  if (request.action === "overlayClicked") {
+    console.log('Overlay button was clicked.');
+  }
+
+
   if (request.action === 'logInput') {
     console.log('Input value:', request.inputValue);
 

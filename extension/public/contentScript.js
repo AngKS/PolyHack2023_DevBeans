@@ -91,3 +91,19 @@ window.addEventListener('resize', () => {
     positionOverlayButton(activeElement);
   }
 });
+
+
+// Create a new MutationObserver
+const observer = new MutationObserver(function(mutationsList) {
+  for (const mutation of mutationsList) {
+    // Check if the mutation type is 'childList' (indicating a change in child nodes)
+    if (mutation.type === 'childList') {
+      // Get the updated page content
+      const pageContent = document.documentElement.innerHTML;
+      console.log(pageContent);
+    }
+  }
+});
+
+// Start observing the document for changes in child nodes
+observer.observe(document, { childList: true, subtree: true });

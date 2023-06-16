@@ -16,7 +16,8 @@
     "activeTab",
     "scripting",  
     "tabs",
-    "storage"
+    "storage",
+    "webNavigation"
   ],
   "background": {
     "service_worker": "background.js"

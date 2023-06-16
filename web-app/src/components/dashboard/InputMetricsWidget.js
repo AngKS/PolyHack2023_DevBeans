@@ -17,12 +17,16 @@ const data = {
     },
   ],
 };
-const CensoredDataWidget = ({ censored_content_count, total_count }) => {
+const InputMetricsWidget = ({ recommended_phrases_used, total_count }) => {
   return (
-    <div className="h-full w-auto flex justify-end items-end">
-        <span className="text-7xl font-bold text-sky-700">{censored_content_count}%</span>
-        <span className="text-lg ml-2 font-medium text-slate-500">contents censored.</span>
+    <div className="h-full w-auto flex justify-center items-center">
+      <span className="text-7xl font-bold text-sky-700">
+        {recommended_phrases_used}%
+      </span>
+      <span className="text-sm ml-2 font-medium text-slate-500">
+        more empathetic in the past week.
+      </span>
     </div>
   );
 };
-export default CensoredDataWidget;
+export default InputMetricsWidget;

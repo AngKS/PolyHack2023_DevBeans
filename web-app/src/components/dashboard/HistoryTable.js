@@ -26,7 +26,7 @@ const HistoryTable = ({websiteVisited}) => {
               <tr key={key} className="border-b border-slate-200 px-3 py-2">
                 <td className="py-2 px-1 text-slate-500 font-medium ">
                   <a href={item.url} rel="noreferrer" target="_blank">
-                    <SlButton variant="text" size="small">
+                    <SlButton variant="text" className="text-black" size="small">
                       <SlIcon slot="prefix" name="globe"></SlIcon>
                       {item.url}
                     </SlButton>
@@ -35,9 +35,9 @@ const HistoryTable = ({websiteVisited}) => {
                 <td className="py-2 px-1 text-slate-700 font-medium ">
                   {item.topics.map((topic, key) => {
                     return (
-                      <SlBadge key={key} variant="primary" pill>
+                      <span key={key} className="px-3 py-2 rounded-lg text-sm text-blue-500">
                         {topic}
-                      </SlBadge>
+                      </span>
                     );
                   })}
                 </td>

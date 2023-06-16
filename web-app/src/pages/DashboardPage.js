@@ -8,6 +8,7 @@ import HistoryTable from "../components/dashboard/HistoryTable";
 import TopicViewWidget from "../components/dashboard/TopicViewWidget";
 import CensoredDataWidget from "../components/dashboard/CensoredDataPieChart";
 import SmartWidget from "../components/dashboard/SmartWidget";
+import InputMetricsWidget from "../components/dashboard/InputMetricsWidget";
 
 function DashboardPage() {
   const navigate = useNavigate();
@@ -160,13 +161,6 @@ function DashboardPage() {
           <SmartWidget />
         </MetricCard>
         <MetricCard
-          title="(%) Censored Data"
-          extra="px-6 lg:col-span-3 sm:auto-cols-auto row-span-1"
-        >
-          <CensoredDataWidget censored_content_count={33} />
-        </MetricCard>
-
-        <MetricCard
           title="Topic most Viewed"
           extra="px-6 lg:col-span-3 sm:auto-cols-auto row-span-1"
         >
@@ -187,12 +181,20 @@ function DashboardPage() {
             ]}
           />
         </MetricCard>
+
         <MetricCard
-          title="Kind'O Matic"
+          title="(%) Censored Data"
           extra="px-6 lg:col-span-3 sm:auto-cols-auto row-span-1"
         >
-          <span>Shows amount of emphathetic/positive recommendations used</span>
+          <CensoredDataWidget censored_content_count={33} />
         </MetricCard>
+        <MetricCard
+          title="Your texts were"
+          extra="px-6 lg:col-span-3 sm:auto-cols-auto row-span-1"
+        >
+          <InputMetricsWidget recommended_phrases_used={41} />
+        </MetricCard>
+
         {/* second tier metrics */}
         <MetricCard
           title="Recent Site History"

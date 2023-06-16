@@ -3,6 +3,7 @@ import { SlBadge, SlButton, SlIcon } from "@shoelace-style/shoelace/dist/react";
 
 const TopicViewWidget = (props) => {
 
+    const [numTopics, setNumTopics] = useState(3)
 
     return (
       <div className="flex flex-col w-full h-full">

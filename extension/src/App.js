@@ -19,6 +19,15 @@ function App() {
     chrome.tabs.create({ url: 'https://mindful-beans.netlify.app/pricing' });
   };
 
+  const saveData = () => {
+    chrome.runtime.sendMessage({ action: "saveData" });
+  };
+
+  const signOut = () => {
+    chrome.storage.local.clear();
+    setAuthorized(false);
+  };
+
   useEffect(() => {
     chrome.storage.local.get("sb-uippnkhijtqmwnwnnypz-auth-token", function (result) {
       if ("sb-uippnkhijtqmwnwnnypz-auth-token" in result) {
@@ -57,6 +66,9 @@ function App() {
       <div className="w-11/12 mx-auto px-3">
         <div className="font-semibold text-lg flex justify-center bg-clip-text text-transparent bg-gradient-to-r from-blue-500 to-teal-400">
           3 harmful contents has been filtered
+        </div>
+        <div onClick={saveData}>
+          Save
         </div>
       </div>
       <div className="w-11/12 mx-auto mt-2">
@@ -250,6 +262,11 @@ function App() {
               />
               <div className="w-11 h-6 bg-gray-200 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-teal-400"></div>
             </label>
+          </div>
+        </div>
+        <div>
+          <div className="w-fit mx-auto px-4 py-2 rounded-xl bg-gradient-to-r from-blue-500 to-teal-400 text-white font-bold">
+            Sign Out
           </div>
         </div>
       </div>

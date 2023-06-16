@@ -12,6 +12,42 @@ function updateButtonState(tabId, state, suggestions) {
 chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
     console.log("Received message:", request);
 
+    if (request.pageContent) {
+        chrome.storage.local.set({ pageContent: request.pageContent, currentWebsite: request.currentWebsite }, function () {
+          console.log("Set page content and current website!")
+        });
+      }
+
+      if (request.action === 'saveData') {
+        chrome.storage.local.get(null, function (result) {
+          const apiUrl = "https://uippnkhijtqmwnwnnypz.supabase.co/rest/v1/Browsing Activities Table";
+          const postData = {
+            "website_url": result.currentWebsite,
+            "website_original_content": result.pageContent,
+            "topics": {}
+          };
+          let supabaseKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InVpcHBua2hpanRxbXdud25ueXB6Iiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTY4NjM4ODMyNiwiZXhwIjoyMDAxOTY0MzI2fQ.6zRD9gLScuHIPy7k2R0F6z1jdY9wJcRN6esn0oF4DLk";
+          fetch(apiUrl, {
+            method: 'POST',
+            headers: {
+              'apikey': supabaseKey,
+              'Authorization': `Bearer ${supabaseKey}`,
+              'Content-Type': 'application/json',
+              'Prefer': 'return=minimal',
+            },
+            body: JSON.stringify(postData),
+          })
+            .then(response => {
+              console.log(response);
+              // Handle the response if needed
+            })
+            .catch(error => {
+              console.error(error);
+              // Handle the error if needed
+            });
+        });
+      }
+
     if (request.action === "overlayClicked") {
         console.log("Overlay button was clicked.");
         let suggestionsArray = ["Suggestion 1", "Suggestion 2", "Suggestion 3"]; // replace with actual suggestions

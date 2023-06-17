@@ -1,6 +1,7 @@
 import React from "react";
 import Chart from "chart.js/auto";
 import {
+  SlBadge,
   SlTab,
   SlTabGroup,
   SlTabPanel,
@@ -10,15 +11,14 @@ import PieChart from "./PieChart";
 
 const Charts = () => {
   return (
-    <SlTabGroup
-    >
+    <SlTabGroup>
       <SlTab active slot="nav" panel="topics-censored">
         Topics Censored over time
       </SlTab>
       <SlTab slot="nav" panel="content-breakdown">
-        Content Breakdown
+        <span className="">Content Breakdown</span>
       </SlTab>
-      <SlTab slot="nav" panel="site-most-visited">
+      <SlTab slot="nav" panel="site-most-visited" disabled>
         Frequently Visited Sites
       </SlTab>
 
@@ -28,8 +28,7 @@ const Charts = () => {
       <sl-tab-panel name="site-most-visited">
         <PieChart />
       </sl-tab-panel>
-      <sl-tab-panel name="content-breakdown">
-      </sl-tab-panel>
+      <sl-tab-panel name="content-breakdown"></sl-tab-panel>
     </SlTabGroup>
   );
 };

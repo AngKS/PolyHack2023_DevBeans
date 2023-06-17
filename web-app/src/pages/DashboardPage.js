@@ -12,6 +12,7 @@ import CensoredDataWidget from "../components/dashboard/CensoredDataPieChart";
 import SmartWidget from "../components/dashboard/SmartWidget";
 import InputMetricsWidget from "../components/dashboard/InputMetricsWidget";
 import { getBrowsingHistory, readFullDatabase } from "../utils/databaseUtils";
+import { SlBadge } from "@shoelace-style/shoelace/dist/react";
 
 function DashboardPage() {
   const navigate = useNavigate();
@@ -70,7 +71,7 @@ function DashboardPage() {
             day: "numeric",
           });
 
-          return setWebsiteVisited((websiteVisited) => [...websiteVisited, {url: item.website_url, last_visited: item.created_at, topics: item.topics}])
+          return setWebsiteVisited((websiteVisited) => [...websiteVisited, {url: item.website_url, last_visited: item.created_at, topics: item.topics, time_spent: item.time_spent}])
         })
         setLoaded(true);
       }
@@ -106,8 +107,10 @@ function DashboardPage() {
         {/* top level insights/metrics */}
         <MetricCard
           title="Smart Recommendations"
+          beta={true}
           extra="px-6 lg:col-span-3 sm:auto-cols-auto row-span-1"
         >
+
           <SmartWidget />
         </MetricCard>
         <MetricCard
@@ -149,7 +152,10 @@ function DashboardPage() {
           title="Recent Site History"
           extra="px-6 lg:col-span-5 sm:auto-cols-auto row-span-4"
         >
-          <HistoryTable websiteVisited={websiteVisited} isLoaded={loaded}></HistoryTable>
+          <HistoryTable
+            websiteVisited={websiteVisited}
+            isLoaded={loaded}
+          ></HistoryTable>
         </MetricCard>
         <MetricCard
           title=""

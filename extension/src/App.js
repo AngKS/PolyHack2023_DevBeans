@@ -11,6 +11,7 @@ function App() {
   const [username, setUsername] = useState("");
   const [contentFilter, setContentFilter] = useState(false);
   const [inputPurification, setInputPurification] = useState(false);
+  const [currentWebsite, setCurrentWebsite] = useState("");
 
   const signIn = () => {
     chrome.tabs.create({ url: 'https://uippnkhijtqmwnwnnypz.supabase.co/auth/v1/authorize?provider=google' });
@@ -60,6 +61,10 @@ function App() {
         setInputPurification(true);
       } else {
         setInputPurification(false);
+      }
+
+      if ("currentTabUrl" in result) {
+        setCurrentWebsite(result.currentTabUrl);
       }
     });
   }, []);
@@ -163,7 +168,7 @@ function App() {
               CURRENT WEBSITE
             </div>
             <div className="font-semibold">
-              www.mindful-beans.com
+              {currentWebsite}
             </div>
           </div>
           <div className="w-2/12 flex items-center justify-center font-bold">

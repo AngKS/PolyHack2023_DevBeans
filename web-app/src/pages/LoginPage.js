@@ -1,6 +1,7 @@
 import React from "react";
 import { useContext, useEffect } from "react";
 import { ApplicationContext } from "../contexts/ApplicationContext";
+import { useNavigate, Link } from "react-router-dom";
 
 import Header from "../layout/Header";
 import Footer from "../layout/Footer";
@@ -12,6 +13,7 @@ import Video from '../assets/login.mp4'
 
 function LoginPage() {
 
+  const navigate = useNavigate();
 
   const { supabaseClient, setIsAuthenticated } = useContext(ApplicationContext)
 
@@ -35,6 +37,21 @@ function LoginPage() {
     window.scrollTo({top: 0, left: 0, behavior: 'smooth'});
 
   }, []);
+  let user = null;
+  const user_item = localStorage.getItem(
+    process.env.REACT_APP_SUPABASE_AUTH_TOKEN_KEY
+  );
+
+  if (user_item) {
+    let user_data = JSON.parse(user_item);
+    if (user_data.user.aud === "authenticated") {
+      user = {
+        image_url: user_data.user.user_metadata.avatar_url,
+        name: user_data.user.user_metadata.full_name,
+      };
+      navigate("/");
+    }
+  }
 
   return (
     <div className="flex flex-col justify-between items-center h-full min-h-screen bg-[#F1FCFE]">

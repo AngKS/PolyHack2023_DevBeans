@@ -1,5 +1,7 @@
-import {React, useEffect, useState} from "react";
+import {React, useEffect, useMemo, useState, useContext} from "react";
 import { useNavigate, Link } from "react-router-dom";
+import { ApplicationContext } from "../contexts/ApplicationContext";
+
 
 import Header from "../layout/Header";
 import MetricCard from "../components/dashboard/MetricCard";
@@ -9,6 +11,7 @@ import TopicViewWidget from "../components/dashboard/TopicViewWidget";
 import CensoredDataWidget from "../components/dashboard/CensoredDataPieChart";
 import SmartWidget from "../components/dashboard/SmartWidget";
 import InputMetricsWidget from "../components/dashboard/InputMetricsWidget";
+import { readFullDatabase } from "../utils/databaseUtils";
 
 function DashboardPage() {
   const navigate = useNavigate();
@@ -31,20 +34,9 @@ function DashboardPage() {
   }
 
   const [customHeight, setCustomHeight] = useState(0);
-  const knownSites = [
-    {
-      name: "Google",
-      icon: "https://www.google.com/favicon.ico",
-    },
-    {
-      name: "Facebook",
-      icon: "https://www.facebook.com/favicon.ico",
-    },
-    {
-      name: "Twitter",
-      icon: "https://www.twitter.com/favicon.ico",
-    }
-  ]
+  const [user_session, setUserSession] = useState(null)
+  const { supabaseClient } = useContext(ApplicationContext);
+  
   const [websiteVisited, setWebsiteVisited] = useState([
     {
       url: "https://github.com/supabase/supabase/issues/2984",
@@ -53,7 +45,10 @@ function DashboardPage() {
     },
     {
       url: "https://huggingface.co/pricing#endpoints",
-      topics: ["politics", "sports"],
+      topics: [
+        "politics",
+        
+      ],
       last_visited: "2021-09-01",
     },
     {
@@ -133,17 +128,43 @@ function DashboardPage() {
     },
   ]);
 
+  const getSession = async () => {
+    let session = await supabaseClient?.auth?.getSession();
+    if (session) {
+      // check if session has expired
+      // const expire_at = 
+      console.log(session)
+      setUserSession(session.data.session)
+    }
+  }
+
+  const getData = async () => {
+    // fetch database objects
+    let { statusCode, body } = await readFullDatabase(
+      "Browsing Activities Table"
+    );
+
+    if (statusCode === 200) {
+      console.log(body.data);
+    }
+
+  }
 
   useEffect(() => {
     // 👇️ scroll to top on page load
     window.scrollTo({top: 0, left: 0, behavior: 'smooth'});
+
+    getData()
+
+
     const header_height = document.getElementById("navbar").clientHeight;
     // get screenHeigh
     const screenHeight = window.innerHeight;
     setCustomHeight(screenHeight - header_height);
-
   }, []);
 
+
+  // getSession();
 
 
   return (

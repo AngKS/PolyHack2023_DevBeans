@@ -28,7 +28,7 @@ function Pricing() {
         color="#FFFFFF"
         name="Basic" 
         description="Improved features from the free plan" 
-        price="2.99"
+        price="4.99"
         features={
           ['Basic Tracking/AI',
            'Basic Analytics',

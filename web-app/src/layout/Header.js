@@ -18,7 +18,7 @@ function Header({dashboard}) {
 
   const navigate = useNavigate();
   const Links = [
-    { name: "Features", link: "/" },
+    { name: "Features", link: "/features" },
     { name: "Pricing", link: "/pricing" },
   ];
 

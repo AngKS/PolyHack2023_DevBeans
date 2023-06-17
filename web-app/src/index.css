@@ -6,3 +6,9 @@ sl-avatar {
     --size: 2.5rem;
     /* background */
 }
+
+
+sl-image-comparer {
+    --width: 50%;
+
+}

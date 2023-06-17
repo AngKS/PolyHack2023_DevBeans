@@ -1,4 +1,5 @@
 let timeoutId = null;
+const apiKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InVpcHBua2hpanRxbXdud25ueXB6Iiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTY4NjM4ODMyNiwiZXhwIjoyMDAxOTY0MzI2fQ.6zRD9gLScuHIPy7k2R0F6z1jdY9wJcRN6esn0oF4DLk";
 
 // Send update to button state
 function updateButtonState(tabId, state, suggestions) {
@@ -13,43 +14,36 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
     console.log("Received message:", request);
 
     if (request.pageContent) {
-        chrome.storage.local.set(
-            {
-                pageContent: request.pageContent,
-                currentWebsite: request.currentWebsite,
-            },
-            function () {
-                console.log("Set page content and current website!");
-            }
-        );
+        chrome.storage.local.set({ pageContent: request.pageContent, currentWebsite: request.currentWebsite }, function () {
+            console.log("Set page content and current website!")
+        });
     }
 
-    if (request.action === "saveData") {
+    if (request.action === 'saveData') {
         chrome.storage.local.get(null, function (result) {
-            const apiUrl =
-                "https://uippnkhijtqmwnwnnypz.supabase.co/rest/v1/Browsing Activities Table";
+            const userInfo = JSON.parse(result["sb-uippnkhijtqmwnwnnypz-auth-token"]);
+            const apiUrl = "https://uippnkhijtqmwnwnnypz.supabase.co/rest/v1/Browsing Activities Table";
             const postData = {
-                website_url: result.currentWebsite,
-                website_original_content: result.pageContent,
-                topics: {},
+                "website_url": result.currentWebsite,
+                "website_original_content": result.pageContent,
+                "topics": {},
+                "user_id": userInfo.user.id
             };
-            let supabaseKey =
-                "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InVpcHBua2hpanRxbXdud25ueXB6Iiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTY4NjM4ODMyNiwiZXhwIjoyMDAxOTY0MzI2fQ.6zRD9gLScuHIPy7k2R0F6z1jdY9wJcRN6esn0oF4DLk";
             fetch(apiUrl, {
-                method: "POST",
+                method: 'POST',
                 headers: {
-                    apikey: supabaseKey,
-                    Authorization: `Bearer ${supabaseKey}`,
-                    "Content-Type": "application/json",
-                    Prefer: "return=minimal",
+                    'apikey': apiKey,
+                    'Authorization': `Bearer ${apiKey}`,
+                    'Content-Type': 'application/json',
+                    'Prefer': 'return=minimal',
                 },
                 body: JSON.stringify(postData),
             })
-                .then((response) => {
+                .then(response => {
                     console.log(response);
                     // Handle the response if needed
                 })
-                .catch((error) => {
+                .catch(error => {
                     console.error(error);
                     // Handle the error if needed
                 });
@@ -123,8 +117,6 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
             //   console.error('Error:', error);
             // });
         }, 2000); // 2 seconds
-    } else if (request.content) {
-        console.log("Scraped content:", request.content);
     } else if (
         request.localStorageData &&
         request.website == "mindful-beans.netlify.app"

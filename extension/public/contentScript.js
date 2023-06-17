@@ -78,9 +78,9 @@ const SuggestionContainer = document.createElement("div");
 // SuggestionContainer.style.maxWidth = "80%";
 
 function showLoading() {
-    overlayButton.innerHTML = ""; // clear the button text
-    overlayButton.appendChild(loadingContainer); // add the spinner
-    overlayButton.style.background = "RGBA(241, 252, 254, 0)";
+  overlayButton.innerHTML = ""; // clear the button text
+  overlayButton.appendChild(loadingContainer); // add the spinner
+  overlayButton.style.background = "RGBA(241, 252, 254, 0)";
 }
 
 function hideLoading() {
@@ -100,29 +100,28 @@ function hideSuccess() {
 }
 
 overlayButton.addEventListener("click", () => {
-    // Actions on button click here
-    chrome.runtime.sendMessage({ action: "overlayClicked" });
+  // Actions on button click here
+  chrome.runtime.sendMessage({ action: "overlayClicked" });
 });
 
 document.body.appendChild(overlayButton);
 
 // Position the overlay button relative to a given input element
 function positionOverlayButton(inputElement) {
-    const rect = inputElement.getBoundingClientRect();
-    const viewportHeight =
-        window.innerHeight || document.documentElement.clientHeight;
+  const rect = inputElement.getBoundingClientRect();
+  const viewportHeight =
+    window.innerHeight || document.documentElement.clientHeight;
 
-    if (rect.top < viewportHeight / 2) {
-        // if the input box is in the top half of the screen
-        overlayButton.style.top = `${rect.bottom + window.scrollY}px`;
-        overlayButton.style.left = `${rect.left + window.scrollX}px`;
-    } else {
-        // if the input box is in the bottom half of the screen
-        overlayButton.style.top = `${
-            rect.top + window.scrollY - overlayButton.offsetHeight
-        }px`;
-        overlayButton.style.left = `${rect.left + window.scrollX}px`;
-    }
+  if (rect.top < viewportHeight / 2) {
+    // if the input box is in the top half of the screen
+    overlayButton.style.top = `${rect.bottom + window.scrollY}px`;
+    overlayButton.style.left = `${rect.left + window.scrollX}px`;
+  } else {
+    // if the input box is in the bottom half of the screen
+    overlayButton.style.top = `${rect.top + window.scrollY - overlayButton.offsetHeight
+      }px`;
+    overlayButton.style.left = `${rect.left + window.scrollX}px`;
+  }
 }
 
 // Add a function to update the button state
@@ -189,40 +188,24 @@ function updateButtonState(state, suggestions = []) {
             overlayButton.style.display = "none";
         }, 5000);
 
-        // overlayButton.innerText = "Success!";
+    // overlayButton.innerText = "Success!";
+  }
+  if (state === "processing") {
+    if (currentStatus != state) {
+      showLoading();
+      currentStatus = state;
     }
-    if (state === "processing") {
-        if (currentStatus != state) {
-            showLoading();
-            currentStatus = state;
-        }
-    }
+  }
 }
 
 // Listen for state changes from the background script
 chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
-    if (request.action === "updateButtonState") {
-        updateButtonState(request.state, request.suggestions);
-    }
+  if (request.action === "updateButtonState") {
+    updateButtonState(request.state, request.suggestions);
+  }
 });
 
-// Capture user inputs and handle the overlay button
-function captureUserInputs_() {
-    document.addEventListener("keydown", function (event) {
-        const activeElement = document.activeElement;
-        const inputValue = activeElement.innerText || activeElement.value;
 
-        // Send a message to the background script
-        chrome.runtime.sendMessage({
-            action: "logInput",
-            inputValue: inputValue,
-        });
-
-        // Show the overlay button and position it
-        overlayButton.style.display = "block";
-        positionOverlayButton(activeElement);
-    });
-}
 
 function captureUserInputs() {
     document.addEventListener("keydown", function (event) {
@@ -259,22 +242,38 @@ function captureUserInputs() {
 }
 
 // Call the captureUserInputs function at the start to handle any already existing inputs
-captureUserInputs();
+// captureUserInputs();
+chrome.storage.local.get("inputPurification", function (result) {
+  if (result.inputPurification) {
+    document.addEventListener("keydown", captureUserInputs);
+  }
+});
+
+chrome.storage.onChanged.addListener(function (changes) {
+  if (changes.inputPurification && !changes.inputPurification.newValue) {
+    // If inputPurification becomes false, remove the event listener
+    console.log("removed")
+    document.removeEventListener("keydown", captureUserInputs);
+  } else if (!changes.inputPurification && changes.inputPurification.newValue) {
+    // If inputPurification becomes true, add the event listener
+    document.addEventListener("keydown", captureUserInputs);
+  }
+});
 
 // To retrieve token from local storage
 function retrieveLocalStorageData() {
-    if (window.location.hostname == "mindful-beans.netlify.app") {
-        if (localStorage.length > 0) {
-            // Send local storage data and current URL to background.js
-            chrome.runtime.sendMessage({
-                localStorageData: localStorage,
-                website: window.location.hostname,
-            });
-        } else {
-            // Keep checking until the user has logged in using mindful-beans
-            setTimeout(retrieveLocalStorageData, 500);
-        }
+  if (window.location.hostname == "mindful-beans.netlify.app") {
+    if (localStorage.length > 0) {
+      // Send local storage data and current URL to background.js
+      chrome.runtime.sendMessage({
+        localStorageData: localStorage,
+        website: window.location.hostname,
+      });
+    } else {
+      // Keep checking until the user has logged in using mindful-beans
+      setTimeout(retrieveLocalStorageData, 500);
     }
+  }
 }
 
 // Call the retrieveLocalStorageData function
@@ -282,53 +281,165 @@ retrieveLocalStorageData();
 
 // Handle window resize events
 window.addEventListener("resize", () => {
-    const activeElement = document.activeElement;
-    if (
-        activeElement &&
-        (activeElement.tagName.toLowerCase() === "input" ||
-            activeElement.tagName.toLowerCase() === "textarea")
-    ) {
-        positionOverlayButton(activeElement);
-    }
+  const activeElement = document.activeElement;
+  if (
+    activeElement &&
+    (activeElement.tagName.toLowerCase() === "input" ||
+      activeElement.tagName.toLowerCase() === "textarea")
+  ) {
+    positionOverlayButton(activeElement);
+  }
 });
 
-// Create a new MutationObserver
-const observer = new MutationObserver(function (mutationsList) {
-    for (const mutation of mutationsList) {
-        // Check if the mutation type is 'childList' (indicating a change in child nodes)
-        if (mutation.type === "childList") {
-            // Get the updated page content
-            const pageContent = document.documentElement.innerText;
-            console.log(pageContent);
-            const metaTags = document.head.getElementsByTagName("meta");
+const contentScanner = async (content) => {
+  return new Promise((resolve, reject) => {
+    try {
+      const parsedContent = content.querySelectorAll('div[class="css-901oao r-18jsvk2 r-37j5jr r-a023e6 r-16dba41 r-rjixqe r-bcqeeo r-bnwqim r-qvutc0"]')[0];
 
-            // Loop through each meta tag and extract relevant metadata
-            for (let i = 0; i < metaTags.length; i++) {
-                const metaTag = metaTags[i];
-                const nameAttribute = metaTag.getAttribute("name");
-                const propertyAttribute = metaTag.getAttribute("property");
-                const contentAttribute = metaTag.getAttribute("content");
+      if (parsedContent) {
+        if (parsedContent.length > 1) {
+          let sentences = '';
+          for (let sentence in parsedContent) {
+            sentences += (sentence.innerText);
+          }
 
-                // Extract specific metadata based on name or property attribute
-                if (nameAttribute === "description") {
-                    const description = contentAttribute;
-                    console.log("Description:", description);
-                }
-
-                if (nameAttribute === "keywords") {
-                    const keywords = contentAttribute;
-                    console.log("Keywords:", keywords);
-                }
-
-                // You can add more conditions to extract other types of metadata
-            }
-            chrome.runtime.sendMessage({
-                pageContent: pageContent,
-                currentWebsite: window.location.hostname,
-            });
+          resolve(sentences);
+        } else {
+          resolve(parsedContent.innerText);
         }
+      } else {
+        reject("");
+        return;
+      }
+    } catch (error) {
+      reject("");
+      return;
     }
-});
+  });
+};
 
-// Start observing the document for changes in child nodes
-observer.observe(document, { childList: true, subtree: true });
+const revealTweet = (e) => {
+  e.target.parentElement.setAttribute("hidden", "");
+  e.target.parentElement.previousElementSibling.style.filter = "blur(0px)";
+}
+
+const getSentiment = async (tweet) => {
+  const response = await fetch(
+    "https://api-inference.huggingface.co/models/unitary/unbiased-toxic-roberta",
+    {
+      headers: { Authorization: "Bearer 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" },
+      method: "POST",
+      body: JSON.stringify(tweet),
+    }
+  );
+
+  const result = await response.json();
+  return result;
+}
+
+const runTweetCheck = async (allNodes) => {
+  try {
+    for (let node of allNodes) {
+      console.log(node.firstChild.childNodes.length);
+
+      let cleanedText = await contentScanner(node);
+      if (cleanedText) {
+        console.log("CLEANED TEXT\n")
+        console.log(cleanedText);
+
+        // let res = await getSentiment({ "text": cleanedText });
+        // console.log(res);
+        // console.log(res[0]['label']);
+        // console.log(res[0]['score']);
+
+        // if (res[0]['score'] > 0.5) {
+        if (1 > 0.5) {
+          let parent = node.children[0].children[0];
+          let revealButton = document.createElement('div');
+          revealButton.addEventListener('click', (e) => revealTweet(e));
+          revealButton.setAttribute("id", "postInjected");
+          revealButton.style.zIndex = "100";
+
+          revealButton.innerHTML = `
+            <button type="button" 
+            style="cursor: pointer;border-radius: 5px;border: none;background-color: dodgerblue;color: white;padding: 10px 20px;margin: 0;position: absolute;top: 50%;left: 40%;transform: translateY(-50%, -40%);z-index: 100;">
+              Reveal Tweet
+            </button>
+          `
+          parent.style.filter = "blur(15px)";
+
+          parent.parentElement.appendChild(revealButton);
+        }
+
+
+      }
+    }
+  } catch (error) {
+    console.log(error)
+  }
+};
+
+const mutationScanner = (function () {
+  var MutationObserver = window.MutationObserver || window.WebKitMutationObserver;
+  return function (obj, callback) {
+    if (!obj || obj.nodeType !== 1) {
+      return;
+    }
+    if (MutationObserver) {
+      var mutationObserver = new MutationObserver(callback)
+      mutationObserver.observe(obj, {
+        childList: true,
+        subtree: false
+      });
+      return mutationObserver;
+    }
+    else if (window.addEventListener) {
+      obj.addEventListener('DOMNodeInserted', callback, false)
+      obj.addEventListener('DOMNodeRemoved', callback, false)
+    }
+  }
+})();
+
+const main = async (getPostsContainer, callback) => {
+  await getPostsContainer()
+    .then((res) => {
+      if (res == undefined) {
+        setTimeout(() => main(getPostsContainer, callback), 1300);
+      }
+
+      callback(res);
+    })
+}
+
+const getPostsContainer = async () => {
+  return new Promise((resolve, reject) => {
+    try {
+      resolve(document.querySelectorAll('div[aria-label^="Timeline: Your Home Timeline"] > div')[0]);
+    } catch (error) {
+      console.log(error);
+      reject("Failed to retrieve tweets");
+    }
+  })
+};
+
+const processPostsContainer = async (res) => {
+  try {
+    runTweetCheck(res.children);
+
+    mutationScanner(res, function (res2) {
+      const addedNodes = [];
+
+      res2.forEach(record => {
+        record.addedNodes.length & addedNodes.push(...record.addedNodes);
+      });
+
+      runTweetCheck(addedNodes);
+    });
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+(async () => {
+  main(getPostsContainer, processPostsContainer);
+})();

@@ -15,7 +15,7 @@ const Charts = () => {
       <SlTab active slot="nav" panel="topics-censored">
         Topics Censored over time
       </SlTab>
-      <SlTab active slot="nav" panel="content-breakdown">
+      <SlTab slot="nav" panel="content-breakdown">
         Content Breakdown
       </SlTab>
       <SlTab slot="nav" panel="site-most-visited">

@@ -18,7 +18,7 @@ function Header({dashboard}) {
 
   const navigate = useNavigate();
   const Links = [
-    { name: "Features", link: "/" },
+    { name: "Features", link: "/features" },
     { name: "Pricing", link: "/pricing" },
   ];
 
@@ -45,6 +45,7 @@ function Header({dashboard}) {
         image_url: user_data.user.user_metadata.avatar_url,
         name: user_data.user.user_metadata.full_name,
       };
+      
     }
     else{
       navigate("/login")

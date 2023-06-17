@@ -17,6 +17,7 @@ import Footer from "./layout/Footer";
 
 import { useState, useEffect } from "react";
 import { ApplicationContext } from "./contexts/ApplicationContext";
+import FeaturesPage from "./pages/FeaturesPage";
 
 function App() {
     const [user, setUser] = useState(null);
@@ -69,6 +70,7 @@ function App() {
               <Route path="/pricing" element={<PricingPage />} />
               <Route path="/dashboard" element={<DashboardPage />} />
               <Route path="/success" element={<SuccessLoginPage />} />
+              <Route path="/features" element={<FeaturesPage />} />
             </Routes>
             <Footer />
         </ApplicationContext.Provider>

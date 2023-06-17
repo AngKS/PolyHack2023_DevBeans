@@ -20,7 +20,7 @@ const data = {
 const InputMetricsWidget = ({ recommended_phrases_used, total_count }) => {
   return (
     <div className="h-full w-auto flex justify-center items-center">
-      <span className="text-7xl font-bold text-sky-700">
+      <span className="text-7xl font-bold text-blue-500">
         {recommended_phrases_used}%
       </span>
       <span className="text-sm ml-2 font-medium text-slate-500">

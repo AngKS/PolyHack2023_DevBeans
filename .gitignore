@@ -1,2 +1,4 @@
 .env
 .idea
+deploy.py
+model_deployment/

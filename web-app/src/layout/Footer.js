@@ -53,8 +53,9 @@ function Footer() {
               {key}
             </h1>
 
-            {data[key].map((item) => (
+            {data[key].map((item, key) => (
               <Link
+                key={key}
                 to={`${Object.values(item)}`}
                 className="text-gray-500 text-md text-black font-medium pb-2 hover:text-blue-400 duration-500"
               >

@@ -152,10 +152,9 @@ function DashboardPage() {
 
   useEffect(() => {
     // 👇️ scroll to top on page load
-    window.scrollTo({top: 0, left: 0, behavior: 'smooth'});
+    window.scrollTo({ top: 0, left: 0, behavior: "smooth" });
 
-    getData()
-
+    getData();
 
     const header_height = document.getElementById("navbar").clientHeight;
     // get screenHeigh
@@ -164,7 +163,6 @@ function DashboardPage() {
   }, []);
 
 
-  // getSession();
 
 
   return (
@@ -202,7 +200,6 @@ function DashboardPage() {
             ]}
           />
         </MetricCard>
-
         <MetricCard
           title="(%) Censored Data"
           extra="px-6 lg:col-span-3 sm:auto-cols-auto row-span-1"

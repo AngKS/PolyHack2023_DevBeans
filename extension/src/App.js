@@ -77,7 +77,7 @@ function App() {
           className="basis-4/6 text-lg flex-col items-center ml-3 cursor-default font-semibold"
         >
           <div>Mindful Beans</div>
-          <div className="text-sm">Hi, {username} <span className="bg-clip-text text-transparent bg-gradient-to-r from-blue-500 to-teal-400">LITE</span></div>
+          <div className="text-sm ">Hi, {username} <span className="bg-clip-text text-transparent bg-gradient-to-r from-blue-500 to-teal-400">LITE</span></div>
         </div>
         <div className="flex justify-end gap-2 basis-1/6 items-center">
           <div onClick={signOut} className="cursor-pointer hover:bg-gradient-to-l duration-200 whitespace-nowrap w-fit mx-auto p-2 rounded-xl bg-gradient-to-r from-blue-500 to-teal-400 text-white font-bold">
@@ -88,8 +88,8 @@ function App() {
       <div className="w-11/12 mx-auto px-3 mt-">
         <div className="flex justify-between mb-2">
           <div>
-            <div className="font-bold text-2xl">Content Filter</div>
-            <div>
+            <div className="font-bold text-xl">Content Filter</div>
+            <div className="text-slate-500">
               Take Control Of Your Online Experience, Filter Out
               The Noise.
             </div>
@@ -108,10 +108,10 @@ function App() {
         </div>
         <div className="flex justify-between my-2">
           <div>
-            <div className="font-bold text-2xl">
+            <div className="font-bold text-xl">
               Input Purification
             </div>
-            <div>
+            <div className="text-slate-500">
               Sanitize Your Input, Refine Your Digital Voice.
             </div>
           </div>
@@ -130,10 +130,7 @@ function App() {
       </div>
       <div className="w-11/12 mx-auto px-3">
         <div className="font-semibold text-lg flex justify-center bg-clip-text text-transparent bg-gradient-to-r from-blue-500 to-teal-400">
-          30 harmful contents
-        </div>
-        <div className="font-semibold text-lg flex justify-center bg-clip-text text-transparent bg-gradient-to-r from-blue-500 to-teal-400">
-          has been filtered
+          30 harmful contents filtered
         </div>
       </div>
       <div className="w-11/12 mx-auto mt-2">
@@ -174,9 +171,9 @@ function App() {
           </div>
         </div>
       </div>
-      <div className="w-11/12 mx-auto mt-2 px-3">
-        <div onClick={navigateToDashboard} className="flex justify-center items-center bg-clip-text text-transparent bg-gradient-to-r from-blue-500 to-teal-400 font-medium cursor-pointer w-fit mx-auto">
-          <RxDashboard className="text-blue-500" />&nbsp;Go to Dashboard
+      <div className="w-11/12 mx-auto mt-2">
+        <div onClick={navigateToDashboard} className="flex justify-center items-center text-white px-3 w-full rounded-xl py-2 bg-gradient-to-r from-blue-500 to-teal-400 font-medium cursor-pointer mx-auto">
+          <RxDashboard className="text-white" />&nbsp;Go to Dashboard
         </div>
         <div className="flex justify-center items-center font-medium mt-3">
           Made with<span className="text-red-500 text-lg">&nbsp;♥️&nbsp;</span>from Singapore

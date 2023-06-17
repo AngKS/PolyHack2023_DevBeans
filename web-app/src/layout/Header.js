@@ -45,6 +45,7 @@ function Header({dashboard}) {
         image_url: user_data.user.user_metadata.avatar_url,
         name: user_data.user.user_metadata.full_name,
       };
+      
     }
     else{
       navigate("/login")

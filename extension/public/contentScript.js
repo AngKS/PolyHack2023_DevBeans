@@ -1,109 +1,152 @@
-// Create an overlay button when the script runs
-const overlayButton = document.createElement('button');
-overlayButton.innerText = 'Overlay';
-overlayButton.style.position = 'absolute';
-overlayButton.style.zIndex = '2147483647'; // max z-index value
-overlayButton.style.background = '#000';
-overlayButton.style.color = '#fff';
-overlayButton.style.border = 'none';
-overlayButton.style.padding = '5px 10px';
-overlayButton.style.borderRadius = '5px';
-overlayButton.style.cursor = 'pointer'; // makes it clear it's a clickable button
-overlayButton.style.display = 'none'; // Initially hidden
+const contentScanner = async (content) => {
+  return new Promise((resolve, reject) => {
+    try {
+      const parsedContent = content.querySelectorAll('div[class="css-901oao r-18jsvk2 r-37j5jr r-a023e6 r-16dba41 r-rjixqe r-bcqeeo r-bnwqim r-qvutc0"]')[0];
 
-overlayButton.addEventListener('click', () => {
-  // Actions on button click here
-  chrome.runtime.sendMessage({ action: "overlayClicked" });
-});
+      if (parsedContent) {
+        if (parsedContent.length > 1) {
+          let sentences = '';
+          for (let sentence in parsedContent) {
+            sentences += (sentence.innerText);
+          }
 
-document.body.appendChild(overlayButton);
+          resolve(sentences);
+        } else {
+          resolve(parsedContent.innerText);
+        }
+      } else {
+        reject("");
+        return;
+      }
+    } catch (error) {
+      reject("");
+      return;
+    }
+  });
+};
 
-// Position the overlay button relative to a given input element
-function positionOverlayButton(inputElement) {
-  const rect = inputElement.getBoundingClientRect();
-  const viewportHeight = window.innerHeight || document.documentElement.clientHeight;
-
-  if (rect.top < viewportHeight / 2) {  // if the input box is in the top half of the screen
-    overlayButton.style.top = `${rect.bottom + window.scrollY}px`;
-    overlayButton.style.left = `${rect.left + window.scrollX}px`;
-  } else {  // if the input box is in the bottom half of the screen
-    overlayButton.style.top = `${rect.top + window.scrollY - overlayButton.offsetHeight}px`;
-    overlayButton.style.left = `${rect.left + window.scrollX}px`;
-  }
+const revealTweet = (e) => {
+  e.target.parentElement.setAttribute("hidden", "");
+  e.target.parentElement.previousElementSibling.style.filter = "blur(0px)";
 }
 
-// Capture user inputs and handle the overlay button
-function captureUserInputs_() {
-  const inputs = document.querySelectorAll('input, textarea, [contenteditable="true"]');
-  for (let i = 0; i < inputs.length; i++) {
-    if (inputs[i].dataset.listening !== 'true') {
-      inputs[i].addEventListener('input', function(event) {
-        let inputValue = '';
+const getSentiment = async (tweet) => {
+  const response = await fetch(
+    "https://api-inference.huggingface.co/models/unitary/unbiased-toxic-roberta",
+    {
+      headers: { Authorization: "Bearer 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" },
+      method: "POST",
+      body: JSON.stringify(tweet),
+    }
+  );
 
-        // Check if the input is a contenteditable field
-        if (this.getAttribute('contenteditable') === 'true') {
-          inputValue = this.innerText;
-        } else {
-          inputValue = this.value;
+  const result = await response.json();
+  return result;
+}
+
+const runTweetCheck = async (allNodes) => {
+  try {
+    for (let node of allNodes) {
+      console.log(node.firstChild.childNodes.length);
+
+      let cleanedText = await contentScanner(node);
+      if (cleanedText) {
+        console.log("CLEANED TEXT\n")
+        console.log(cleanedText);
+
+        // let res = await getSentiment({ "text": cleanedText });
+        // console.log(res);
+        // console.log(res[0]['label']);
+        // console.log(res[0]['score']);
+
+        // if (res[0]['score'] > 0.5) {
+        if (1 > 0.5) {
+          let parent = node.children[0].children[0];
+          let revealButton = document.createElement('div');
+          revealButton.addEventListener('click', (e) => revealTweet(e));
+          revealButton.setAttribute("id", "postInjected");
+          revealButton.style.zIndex = "100";
+
+          revealButton.innerHTML = `
+            <button type="button" 
+            style="cursor: pointer;border-radius: 5px;border: none;background-color: dodgerblue;color: white;padding: 10px 20px;margin: 0;position: absolute;top: 50%;left: 40%;transform: translateY(-50%, -40%);z-index: 100;">
+              Reveal Tweet
+            </button>
+          `
+          parent.style.filter = "blur(15px)";
+
+          parent.parentElement.appendChild(revealButton);
         }
 
-        chrome.runtime.sendMessage({ action: "logInput", inputValue: inputValue });
-      });
 
-      // Show the overlay button when the input element is focused
-      inputs[i].addEventListener('focus', function() {
-        overlayButton.style.display = 'block';
-        positionOverlayButton(this);
-      });
-
-      inputs[i].dataset.listening = 'true';
+      }
     }
+  } catch (error) {
+    console.log(error)
+  }
+};
+
+const mutationScanner = (function () {
+  var MutationObserver = window.MutationObserver || window.WebKitMutationObserver;
+  return function (obj, callback) {
+    if (!obj || obj.nodeType !== 1) {
+      return;
+    }
+    if (MutationObserver) {
+      var mutationObserver = new MutationObserver(callback)
+      mutationObserver.observe(obj, {
+        childList: true,
+        subtree: false
+      });
+      return mutationObserver;
+    }
+    else if (window.addEventListener) {
+      obj.addEventListener('DOMNodeInserted', callback, false)
+      obj.addEventListener('DOMNodeRemoved', callback, false)
+    }
+  }
+})();
+
+const main = async (getPostsContainer, callback) => {
+  await getPostsContainer()
+    .then((res) => {
+      if (res == undefined) {
+        setTimeout(() => main(getPostsContainer, callback), 1300);
+      }
+
+      callback(res);
+    })
+}
+
+const getPostsContainer = async () => {
+  return new Promise((resolve, reject) => {
+    try {
+      resolve(document.querySelectorAll('div[aria-label^="Timeline: Your Home Timeline"] > div')[0]);
+    } catch (error) {
+      console.log(error);
+      reject("Failed to retrieve tweets");
+    }
+  })
+};
+
+const processPostsContainer = async (res) => {
+  try {
+    runTweetCheck(res.children);
+
+    mutationScanner(res, function (res2) {
+      const addedNodes = [];
+
+      res2.forEach(record => {
+        record.addedNodes.length & addedNodes.push(...record.addedNodes);
+      });
+
+      runTweetCheck(addedNodes);
+    });
+  } catch (error) {
+    console.log(error);
   }
 }
 
-// Capture user inputs and handle the overlay button
-function captureUserInputs() {
-  document.addEventListener('keydown', function(event) {
-    const activeElement = document.activeElement;
-    const inputValue = activeElement.innerText || activeElement.value;
-
-    // Send a message to the background script
-    chrome.runtime.sendMessage({ action: "logInput", inputValue: inputValue });
-
-    // Show the overlay button and position it
-    overlayButton.style.display = 'block';
-    positionOverlayButton(activeElement);
-  });
-}
-
-
-
-// Call the captureUserInputs function at the start to handle any already existing inputs
-captureUserInputs();
-
-// Call the retrieveLocalStorageData function
-retrieveLocalStorageData();
-
-// Handle window resize events
-window.addEventListener('resize', () => {
-  const activeElement = document.activeElement;
-  if (activeElement && (activeElement.tagName.toLowerCase() === 'input' || activeElement.tagName.toLowerCase() === 'textarea')) {
-    positionOverlayButton(activeElement);
-  }
-});
-
-
-// Create a new MutationObserver
-const observer = new MutationObserver(function(mutationsList) {
-  for (const mutation of mutationsList) {
-    // Check if the mutation type is 'childList' (indicating a change in child nodes)
-    if (mutation.type === 'childList') {
-      // Get the updated page content
-      const pageContent = document.documentElement.innerHTML;
-      console.log(pageContent);
-    }
-  }
-});
-
-// Start observing the document for changes in child nodes
-observer.observe(document, { childList: true, subtree: true });
+(async () => {
+  main(getPostsContainer, processPostsContainer);
+})();

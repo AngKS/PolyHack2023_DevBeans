@@ -359,6 +359,7 @@ const getTweetTopics = async (tweet) => {
 }
 
 const getTopicsSentiments = async (cleanedText) => {
+  console.log("hey")
   return ["label1", true];
   const sentiments = await getTweetSentiments({ "text": cleanedText });
   const filteredLabels = sentiments.filter(output => output.score > 0.5).map(output => output.label);
@@ -493,11 +494,15 @@ const mutationScanner = (function () {
 
 const main = async (getPostsContainer, callback) => {
   await getPostsContainer().then((res) => {
-    if (res == undefined) {
-      setTimeout(() => main(getPostsContainer, callback), 1300);
-    }
-
-    callback(res);
+    chrome.storage.local.get("contentFilter", function (result) {
+      if (result.contentFilter) {
+        if (res == undefined) {
+          setTimeout(() => main(getPostsContainer, callback), 1300);
+        }
+    
+        callback(res);
+      }
+    });
   });
 };
 

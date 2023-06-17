@@ -70,6 +70,22 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
             console.log("Sending API request...");
             updateButtonState(sender.tab.id, "success");
 
+        }, 2000); // 2 seconds
+
+        // Set a new timeout
+        timeoutId = setTimeout(function () {
+            // This block of code will be executed after 2 seconds of no input updates
+
+            console.log("Sending API request...");
+            // updateButtonState(sender.tab.id, "success");
+
+            let suggestionsArray = [
+                "Suggestion 1",
+                "Suggestion 2asdfasdfasdfadsfasdfasdfasfd",
+                "Suggest adskfjahs;dfaj fjasldkfjsd fkjdsaj j;lkfjdfj asd jaskdfjaskldfja  jklasdjfakljf asdf jlkafjaklsdfjasdf jkldjfasljfads fjlk;asjfalkdjfa jklajfkldsjfaslkjf jlkasdfjakldsfj ",
+            ];
+            updateButtonState(sender.tab.id, "suggestions", suggestionsArray);
+
             // Prepare your API request
             const url = "https://example.com/api"; // Replace with your API URL
             const data = { input: request.inputValue }; // Replace with your actual data

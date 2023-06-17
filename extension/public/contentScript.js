@@ -24,25 +24,30 @@ loadingContainer.style.alignItems = "center";
 loadingContainer.style.width = "25px"; // or any width you want
 loadingContainer.style.height = "25px"; // or any height you want
 
-var logoImg = document.createElement("img");
-logoImg.id = "logoImg";
-logoImg.src =
-    "https://mindful-beans.netlify.app/static/media/logo.c1326f89940153adfbe4.png";
-logoImg.alt = "Logo";
-logoImg.style.position = "absolute"; // to position inside the container
-logoImg.style.zIndex = "2";
-logoImg.style.width = "25px"; // or any width you want
-logoImg.style.height = "25px"; // or any height you want
+const getLogo = (position = "absolute") => {
+    var logoImg = document.createElement("img");
+    logoImg.id = "logoImg";
+    logoImg.src =
+        "https://mindful-beans.netlify.app/static/media/logo.c1326f89940153adfbe4.png";
+    logoImg.alt = "Logo";
+    logoImg.style.position = position; // to position inside the container
+    logoImg.style.zIndex = "2";
+    logoImg.style.width = "25px"; // or any width you want
+    logoImg.style.height = "25px"; // or any height you want
 
-var logoImg2 = document.createElement("img");
-logoImg2.id = "logoImg";
-logoImg2.src =
-    "https://mindful-beans.netlify.app/static/media/logo.c1326f89940153adfbe4.png";
-logoImg2.alt = "Logo";
-logoImg2.style.position = "relative"; // to position inside the container
-logoImg2.style.zIndex = "2";
-logoImg2.style.width = "25px"; // or any width you want
-logoImg2.style.height = "25px"; // or any height you want
+    return logoImg;
+};
+
+const getMessage = (message, paddingLeft = "5px", paddingRight = "5px") => {
+    const outputMessage = document.createElement("div");
+    outputMessage.style.paddingLeft = "5px";
+    outputMessage.style.paddingRight = "5px";
+    outputMessage.style.color = "white";
+    outputMessage.style.fontSize = "15px";
+    outputMessage.style.fontWeight = "bold";
+    outputMessage.innerText = message;
+    return outputMessage;
+};
 
 // Create the spinner
 var spinner = document.createElement("div");
@@ -54,7 +59,7 @@ spinner.style.width = "25px"; // or any width you want
 spinner.style.height = "25px"; // or any height you want
 
 loadingContainer.appendChild(spinner);
-loadingContainer.appendChild(logoImg);
+loadingContainer.appendChild(getLogo("absolute"));
 
 const SuccessContainer = document.createElement("div");
 SuccessContainer.style.position = "relative"; // make it a stacking context
@@ -65,16 +70,8 @@ SuccessContainer.style.height = "25px"; // or any height you want
 SuccessContainer.style.minWidth = "50px";
 SuccessContainer.backgroundColor = "rgba(59, 130, 246, 1)";
 
-const successMessage = document.createElement("div");
-successMessage.style.paddingLeft = "5px";
-successMessage.style.paddingRight = "5px";
-successMessage.style.color = "white";
-successMessage.style.fontSize = "15px";
-successMessage.style.fontWeight = "bold";
-successMessage.innerText = "Safe";
-
-SuccessContainer.appendChild(logoImg2);
-SuccessContainer.appendChild(successMessage);
+SuccessContainer.appendChild(getLogo("relative"));
+SuccessContainer.appendChild(getMessage("Safe"));
 
 function showLoading() {
     overlayButton.innerHTML = ""; // clear the button text
@@ -118,6 +115,19 @@ function positionOverlayButton(inputElement) {
 function updateButtonState(state, suggestions = []) {
     overlayButton.setAttribute("data-state", state);
     if (state === "suggestions") {
+        const SuggestionContainer = document.createElement("div");
+        SuggestionContainer.style.position = "relative"; // make it a stacking context
+        SuggestionContainer.style.display = "flex";
+        SuggestionContainer.style.justifyContent = "between";
+        SuggestionContainer.style.alignItems = "center";
+        SuggestionContainer.style.height = "25px"; // or any height you want
+        SuggestionContainer.style.minWidth = "50px";
+        SuggestionContainer.backgroundColor = "rgba(59, 130, 246, 1)";
+        SuggestionContainer.style.maxWidth = "80%";
+
+        SuccessContainer.appendChild(getLogo("relative"));
+        SuccessContainer.appendChild(successMessage);
+
         // Create suggestion elements (for example, as list items in a dropdown)
         let dropdown = document.createElement("div");
         dropdown.className = "suggestion-dropdown";
@@ -158,11 +168,9 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
 
 // Capture user inputs and handle the overlay button
 function captureUserInputs_() {
-
     document.addEventListener("keydown", function (event) {
         const activeElement = document.activeElement;
         const inputValue = activeElement.innerText || activeElement.value;
-
 
         // Send a message to the background script
         chrome.runtime.sendMessage({
@@ -177,39 +185,38 @@ function captureUserInputs_() {
 }
 
 function captureUserInputs() {
-  document.addEventListener("keydown", function (event) {
-    const activeElement = document.activeElement;
+    document.addEventListener("keydown", function (event) {
+        const activeElement = document.activeElement;
 
-    // Check if active element is an input field and if so, what type
-    if (activeElement instanceof HTMLInputElement) {
-      const inputType = activeElement.type;
+        // Check if active element is an input field and if so, what type
+        if (activeElement instanceof HTMLInputElement) {
+            const inputType = activeElement.type;
 
-      // Check if the input field is for email, password, or username
-      if (
-        inputType === "email" ||
-        inputType === "password" ||
-        (inputType === "text" && ["username", "user", "login"].includes(activeElement.name))
-      ) {
-        // If it is, don't show the overlay button and don't send a message
-        return;
-      }
-    }
+            // Check if the input field is for email, password, or username
+            if (
+                inputType === "email" ||
+                inputType === "password" ||
+                (inputType === "text" &&
+                    ["username", "user", "login"].includes(activeElement.name))
+            ) {
+                // If it is, don't show the overlay button and don't send a message
+                return;
+            }
+        }
 
-    const inputValue = activeElement.innerText || activeElement.value;
+        const inputValue = activeElement.innerText || activeElement.value;
 
-    // Send a message to the background script
-    chrome.runtime.sendMessage({
-      action: "logInput",
-      inputValue: inputValue,
+        // Send a message to the background script
+        chrome.runtime.sendMessage({
+            action: "logInput",
+            inputValue: inputValue,
+        });
+
+        // Show the overlay button and position it
+        overlayButton.style.display = "block";
+        positionOverlayButton(activeElement);
     });
-
-    // Show the overlay button and position it
-    overlayButton.style.display = "block";
-    positionOverlayButton(activeElement);
-  });
 }
-
-
 
 // Call the captureUserInputs function at the start to handle any already existing inputs
 captureUserInputs();

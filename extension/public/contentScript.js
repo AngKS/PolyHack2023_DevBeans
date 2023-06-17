@@ -6,11 +6,11 @@ overlayButton.style.zIndex = "2147483647"; // max z-index value
 overlayButton.style.background = "#F1FCFE";
 overlayButton.style.color = "#3b82f6";
 overlayButton.style.border = "none";
-overlayButton.style.padding = "3px 6px";
-overlayButton.style.borderRadius = "5px";
+overlayButton.style.borderRadius = "25px";
 overlayButton.style.cursor = "pointer"; // makes it clear it's a clickable button
 overlayButton.style.display = "none"; // Initially hidden
 overlayButton.setAttribute("data-state", "idle"); // Set initial state as idle
+overlayButton.style.padding = "0px";
 
 let currentStatus = "idle";
 
@@ -31,6 +31,15 @@ logoImg.style.zIndex = '2';
 logoImg.style.width = '25px'; // or any width you want
 logoImg.style.height = '25px'; // or any height you want
 
+var logoImg2 = document.createElement("img");
+logoImg2.id = "logoImg";
+logoImg2.src = "https://mindful-beans.netlify.app/static/media/logo.c1326f89940153adfbe4.png";
+logoImg2.alt = "Logo";
+logoImg2.style.position = 'relative'; // to position inside the container
+logoImg2.style.zIndex = '2';
+logoImg2.style.width = '25px'; // or any width you want
+logoImg2.style.height = '25px'; // or any height you want
+
 // Create the spinner
 var spinner = document.createElement('div');
 spinner.classList.add('grow-pulse');
@@ -43,6 +52,27 @@ spinner.style.height = '25px'; // or any height you want
 loadingContainer.appendChild(spinner);
 loadingContainer.appendChild(logoImg);
 
+const SuccessContainer = document.createElement("div");
+SuccessContainer.style.position = 'relative'; // make it a stacking context
+SuccessContainer.style.display = 'flex';
+SuccessContainer.style.justifyContent = 'between';
+SuccessContainer.style.alignItems = 'center';
+SuccessContainer.style.height = '25px'; // or any height you want
+SuccessContainer.style.minWidth = '50px';
+SuccessContainer.backgroundColor = 'rgba(59, 130, 246, 1)';
+
+const successMessage = document.createElement("div");
+successMessage.style.paddingLeft = '5px';
+successMessage.style.paddingRight = '5px';
+successMessage.style.color = 'white';
+successMessage.style.fontSize = '15px';
+successMessage.style.fontWeight = 'bold';
+successMessage.innerText = 'Safe';
+
+SuccessContainer.appendChild(logoImg2)
+SuccessContainer.appendChild(successMessage)
+
+
 function showLoading() {
   overlayButton.innerHTML = ""; // clear the button text
   overlayButton.appendChild(loadingContainer); // add the spinner
@@ -51,8 +81,8 @@ function showLoading() {
 
 function hideLoading() {
   overlayButton.removeChild(loadingContainer); // remove the spinner
-  overlayButton.innerHTML = "finished loading"; // restore the button text
-  overlayButton.style.background = "#F1FCFE";
+  overlayButton.appendChild(SuccessContainer); // add the success message
+  overlayButton.style.background = '#023e8a';
 }
 
 overlayButton.addEventListener("click", () => {
@@ -99,7 +129,7 @@ function updateButtonState(state, suggestions = []) {
       hideLoading();
       currentStatus = state;
     }
-    overlayButton.innerText = "Success!";
+    // overlayButton.innerText = "Success!";
   }
   if (state === "processing") {
     if (currentStatus != state) {

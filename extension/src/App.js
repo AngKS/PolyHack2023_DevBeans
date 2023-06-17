@@ -1,26 +1,24 @@
 import "./index.css";
 import { useEffect, useState } from "react";
-import { IoSettingsOutline } from "react-icons/io5";
-import { AiOutlineCloseCircle, AiOutlineHome } from "react-icons/ai";
+import { AiOutlineHome } from "react-icons/ai";
 import logo from "../public/icons/logo128.png";
 import { FaCrown } from "react-icons/fa";
 import { FcGoogle } from "react-icons/fc";
+import { RxDashboard } from "react-icons/rx";
 
 function App() {
-  const [page, setPage] = useState("Default");
   const [authorized, setAuthorized] = useState(false);
   const [username, setUsername] = useState("");
+  const [contentFilter, setContentFilter] = useState(false);
+  const [inputPurification, setInputPurification] = useState(false);
 
   const signIn = () => {
     chrome.tabs.create({ url: 'https://uippnkhijtqmwnwnnypz.supabase.co/auth/v1/authorize?provider=google' });
   };
 
-  const upgrade = () => {
-    chrome.tabs.create({ url: 'https://mindful-beans.netlify.app/pricing' });
-  };
-
-  const saveData = () => {
-    chrome.runtime.sendMessage({ action: "saveData" });
+  const navigateToDashboard = () => {
+    const link = "https://mindful-beans.netlify.app/dashboard";
+    window.open(link, "_blank");
   };
 
   const signOut = () => {
@@ -28,8 +26,20 @@ function App() {
     setAuthorized(false);
   };
 
+  const onChangeContentFilter = (e) => {
+    setContentFilter(e.target.checked);
+    chrome.storage.local.set({ contentFilter: e.target.checked }, function () {
+    });
+  };
+
+  const onChangeInputPurification = (e) => {
+    setInputPurification(e.target.checked);
+    chrome.storage.local.set({ inputPurification: e.target.checked }, function () {
+    });
+  };
+
   useEffect(() => {
-    chrome.storage.local.get("sb-uippnkhijtqmwnwnnypz-auth-token", function (result) {
+    chrome.storage.local.get(null, function (result) {
       if ("sb-uippnkhijtqmwnwnnypz-auth-token" in result) {
         setAuthorized(true);
         let user_data = JSON.parse(result["sb-uippnkhijtqmwnwnnypz-auth-token"]);
@@ -39,36 +49,91 @@ function App() {
       } else {
         setAuthorized(false);
       }
+
+      if (result.contentFilter) {
+        setContentFilter(true);
+      } else {
+        setContentFilter(false);
+      }
+
+      if (result.inputPurification) {
+        setInputPurification(true);
+      } else {
+        setInputPurification(false);
+      }
     });
   }, []);
 
   const Default_Page = (
     <>
       <div className="topNav w-11/12 mx-auto py-4 px-3 flex">
-        <div className="basis-1/6">
+        <div className="basis-1/6 flex items-center">
           <div className="rounded-full h-10 w-10 bg-white flex items-center justify-center">
             <img src={logo} alt="Logo" />
           </div>
         </div>
         <div
           id="login"
-          className="basis-4/6 text-lg flex items-center ml-3 cursor-default font-semibold"
+          className="basis-4/6 text-lg flex-col items-center ml-3 cursor-default font-semibold"
         >
-          Mindful Beans
+          <div>Mindful Beans</div>
+          <div className="text-sm">Hi, {username} <span className="bg-clip-text text-transparent bg-gradient-to-r from-blue-500 to-teal-400">LITE</span></div>
         </div>
         <div className="flex justify-end gap-2 basis-1/6 items-center">
-          <IoSettingsOutline
-            className="text-xl cursor-pointer hover:text-gray-400 duration-200"
-            onClick={() => setPage("Settings")}
-          />
+          <div onClick={signOut} className="cursor-pointer hover:bg-gradient-to-l duration-200 whitespace-nowrap w-fit mx-auto p-2 rounded-xl bg-gradient-to-r from-blue-500 to-teal-400 text-white font-bold">
+            Sign Out
+          </div>
+        </div>
+      </div>
+      <div className="w-11/12 mx-auto px-3 mt-">
+        <div className="flex justify-between mb-2">
+          <div>
+            <div className="font-bold text-2xl">Content Filter</div>
+            <div>
+              Take Control Of Your Online Experience, Filter Out
+              The Noise.
+            </div>
+          </div>
+          <div className="flex items-center">
+            <label className="relative inline-flex items-center cursor-pointer">
+              <input
+                type="checkbox"
+                checked={contentFilter}
+                className="sr-only peer"
+                onChange={onChangeContentFilter}
+              />
+              <div className="w-11 h-6 bg-gray-200 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-teal-400"></div>
+            </label>
+          </div>
+        </div>
+        <div className="flex justify-between my-2">
+          <div>
+            <div className="font-bold text-2xl">
+              Input Purification
+            </div>
+            <div>
+              Sanitize Your Input, Refine Your Digital Voice.
+            </div>
+          </div>
+          <div className="flex items-center">
+            <label className="relative inline-flex items-center cursor-pointer">
+              <input
+                type="checkbox"
+                checked={inputPurification}
+                className="sr-only peer"
+                onChange={onChangeInputPurification}
+              />
+              <div className="w-11 h-6 bg-gray-200 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-teal-400"></div>
+            </label>
+          </div>
         </div>
       </div>
       <div className="w-11/12 mx-auto px-3">
         <div className="font-semibold text-lg flex justify-center bg-clip-text text-transparent bg-gradient-to-r from-blue-500 to-teal-400">
-          3 harmful contents has been filtered
+          30 harmful contents
         </div>
-        <div onClick={saveData}>
-          Save
+        <div className="font-semibold text-lg flex justify-center bg-clip-text text-transparent bg-gradient-to-r from-blue-500 to-teal-400">
+          has been filtered
         </div>
       </div>
       <div className="w-11/12 mx-auto mt-2">
@@ -110,164 +175,11 @@ function App() {
         </div>
       </div>
       <div className="w-11/12 mx-auto mt-2 px-3">
-        <div className="text-[15px] font-semibold mb-2">
-          Topic Breakdown
+        <div onClick={navigateToDashboard} className="flex justify-center items-center bg-clip-text text-transparent bg-gradient-to-r from-blue-500 to-teal-400 font-medium cursor-pointer w-fit mx-auto">
+          <RxDashboard className="text-blue-500" />&nbsp;Go to Dashboard
         </div>
-        <div>
-          <div className="flex items-center gap-2">
-            <div className="w-1.5 h-1.5 rounded-full bg-blue-600"></div>
-            <div className="font-bold">Technology</div>
-          </div>
-          <div className="flex items-center justify-between">
-            <div className="w-[70%] bg-progress-bar rounded-full h-2">
-              <div className="bg-blue-600 h-2 rounded-full w-[38%]"></div>
-            </div>
-            <div className="text-website-section-head font-bold">
-              2 hr 50 min
-            </div>
-          </div>
-        </div>
-        <div>
-          <div className="flex items-center gap-2">
-            <div className="w-1.5 h-1.5 rounded-full bg-green-400"></div>
-            <div className="font-bold">Sports</div>
-          </div>
-          <div className="flex items-center justify-between">
-            <div className="w-[70%] bg-progress-bar rounded-full h-2">
-              <div className="bg-green-400 h-2 rounded-full w-[25%]"></div>
-            </div>
-            <div className="text-website-section-head font-bold">
-              1 hr 52 min
-            </div>
-          </div>
-        </div>
-        <div>
-          <div className="flex items-center gap-2">
-            <div className="w-1.5 h-1.5 rounded-full bg-red-600"></div>
-            <div className="font-bold">Pornography</div>
-          </div>
-          <div className="flex items-center justify-between">
-            <div className="w-[70%] bg-progress-bar rounded-full h-2">
-              <div className="bg-red-600 h-2 rounded-full w-[17%]"></div>
-            </div>
-            <div className="text-red-600 font-bold">
-              1 hr 16 min
-            </div>
-          </div>
-        </div>
-        <div>
-          <div className="flex items-center gap-2">
-            <div className="w-1.5 h-1.5 rounded-full bg-yellow-400"></div>
-            <div className="font-bold">Education</div>
-          </div>
-          <div className="flex items-center justify-between">
-            <div className="w-[70%] bg-progress-bar rounded-full h-2">
-              <div className="bg-yellow-400 h-2 rounded-full w-[12%]"></div>
-            </div>
-            <div className="text-website-section-head font-bold">
-              53 min
-            </div>
-          </div>
-        </div>
-        <div>
-          <div className="flex items-center gap-2">
-            <div className="w-1.5 h-1.5 rounded-full bg-red-600"></div>
-            <div className="font-bold">Negativity</div>
-          </div>
-          <div className="flex items-center justify-between">
-            <div className="w-[70%] bg-progress-bar rounded-full h-2">
-              <div className="bg-red-600 h-2 rounded-full w-[8%]"></div>
-            </div>
-            <div className="text-red-600 font-bold">35 min</div>
-          </div>
-        </div>
-      </div>
-    </>
-  );
-
-  const Settings_Page = (
-    <>
-      <div className="topNav w-11/12 mx-auto py-4 px-3 flex">
-        <div className="basis-1/6">
-          <div className="rounded-full h-10 w-10 bg-white flex items-center justify-center">
-            <img src={logo} alt="Logo" />
-          </div>
-        </div>
-        <div className="basis-4/6 text-lg flex items-center ml-3 cursor-default font-semibold">
-          Mindful Beans
-        </div>
-        <div className="flex justify-end gap-2 basis-1/6 items-center">
-          <AiOutlineHome
-            className="text-xl cursor-pointer hover:text-gray-400 duration-200"
-            onClick={() => setPage("Default")}
-          />
-        </div>
-      </div>
-      <div className="w-11/12 mx-auto px-3 mt-2">
-        <div className="flex h-fit">
-          <div className="w-1/3"></div>
-          <div className="w-1/3 text-center font-bold flex items-center">
-            <div className="">
-              <div className="text-[15px] whitespace-nowrap">{username}</div>
-              <div className="text-[15px] bg-clip-text text-transparent bg-gradient-to-r from-blue-500 to-teal-400">
-                LITE
-              </div>
-            </div>
-          </div>
-          <div className="w-1/3 flex justify-end">
-            <div onClick={upgrade} className="w-fit h-full text-white p-2 bg-gradient-to-r from-blue-500 to-teal-400 rounded-xl cursor-pointer">
-              <div className="flex justify-center text-xl text-amber-400">
-                <FaCrown />
-              </div>
-              <div className="font-semibold">Upgrade</div>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div className="w-11/12 mx-auto px-3 mt-6">
-        <div className="flex justify-between mb-2">
-          <div>
-            <div className="font-bold text-2xl">Content Filter</div>
-            <div>
-              Take Control Of Your Online Experience, Filter Out
-              The Noise.
-            </div>
-          </div>
-          <div className="flex items-center">
-            <label className="relative inline-flex items-center cursor-pointer">
-              <input
-                type="checkbox"
-                value=""
-                className="sr-only peer"
-              />
-              <div className="w-11 h-6 bg-gray-200 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-teal-400"></div>
-            </label>
-          </div>
-        </div>
-        <div className="flex justify-between my-2">
-          <div>
-            <div className="font-bold text-2xl">
-              Input Purification
-            </div>
-            <div>
-              Sanitize Your Input, Refine Your Digital Voice.
-            </div>
-          </div>
-          <div className="flex items-center">
-            <label className="relative inline-flex items-center cursor-pointer">
-              <input
-                type="checkbox"
-                value=""
-                className="sr-only peer"
-              />
-              <div className="w-11 h-6 bg-gray-200 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-teal-400"></div>
-            </label>
-          </div>
-        </div>
-        <div>
-          <div className="w-fit mx-auto px-4 py-2 rounded-xl bg-gradient-to-r from-blue-500 to-teal-400 text-white font-bold">
-            Sign Out
-          </div>
+        <div className="flex justify-center items-center font-medium mt-3">
+          Made with<span className="text-red-500 text-lg">&nbsp;♥️&nbsp;</span>from Singapore
         </div>
       </div>
     </>
@@ -314,10 +226,7 @@ function App() {
   return (
     <div className="w-ext h-ext bg-background relative">
       {authorized ? (
-        <div>
-          {page === 'Default' && Default_Page}
-          {page === 'Settings' && Settings_Page}
-        </div>
+        Default_Page
       ) : (
         Login_Page
       )}

@@ -1,0 +1,22 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: >
+  Mindful Beans Serverless Backend
+
+
+Resources:
+  # ========== Lambda Declaration ==========  
+    PythonHandler:
+      Type: AWS::Serverless::Function
+      Properties:
+        CodeUri: ../handlers/
+        Handler: pythonApp.mainHandler
+        Runtime: python3.9
+        Architectures:
+          - x86_64
+        Events:
+          test:
+            Type: Api
+            Properties:
+              Path: /testpy
+              Method: GET

@@ -1,8 +1,9 @@
 let timeoutId = null;
+let maxElementWidth = document.documentElement.clientWidth * 0.8;
 
 // Create an overlay button when the script runs
 const overlayButton = document.createElement("button");
-overlayButton.innerText = "Overlay";
+overlayButton.innerText = "";
 overlayButton.style.position = "absolute";
 overlayButton.style.zIndex = "2147483647"; // max z-index value
 overlayButton.style.background = "#F1FCFE";
@@ -73,6 +74,9 @@ SuccessContainer.backgroundColor = "rgba(59, 130, 246, 1)";
 SuccessContainer.appendChild(getLogo("relative"));
 SuccessContainer.appendChild(getMessage("Safe"));
 
+const SuggestionContainer = document.createElement("div");
+// SuggestionContainer.style.maxWidth = "80%";
+
 function showLoading() {
     overlayButton.innerHTML = ""; // clear the button text
     overlayButton.appendChild(loadingContainer); // add the spinner
@@ -80,9 +84,19 @@ function showLoading() {
 }
 
 function hideLoading() {
-    overlayButton.removeChild(loadingContainer); // remove the spinner
-    overlayButton.appendChild(SuccessContainer); // add the success message
+    overlayButton.removeChild(loadingContainer);
+    
+}
+
+function showSuccess() {
+    overlayButton.appendChild(SuccessContainer);
     overlayButton.style.background = "#023e8a";
+    overlayButton.style.borderRadius = "25px";
+}
+
+function hideSuccess() {
+    overlayButton.removeChild(SuccessContainer);
+    overlayButton.style.background = "RGBA(241, 252, 254, 0)";
 }
 
 overlayButton.addEventListener("click", () => {
@@ -115,37 +129,63 @@ function positionOverlayButton(inputElement) {
 function updateButtonState(state, suggestions = []) {
     overlayButton.setAttribute("data-state", state);
     if (state === "suggestions") {
-        const SuggestionContainer = document.createElement("div");
-        SuggestionContainer.style.position = "relative"; // make it a stacking context
-        SuggestionContainer.style.display = "flex";
-        SuggestionContainer.style.justifyContent = "between";
-        SuggestionContainer.style.alignItems = "center";
-        SuggestionContainer.style.height = "25px"; // or any height you want
-        SuggestionContainer.style.minWidth = "50px";
-        SuggestionContainer.backgroundColor = "rgba(59, 130, 246, 1)";
-        SuggestionContainer.style.maxWidth = "80%";
+        currentStatus = state;
+        overlayButton.innerHTML = ""; 
+        SuggestionContainer.innerHTML = "";
 
-        SuccessContainer.appendChild(getLogo("relative"));
-        SuccessContainer.appendChild(successMessage);
+        overlayButton.style.background = "RGBA(241, 252, 254, 0)";
+        const logoMessageContainer = document.createElement("div");
+        logoMessageContainer.style.position = "relative"; // make it a stacking context
+        logoMessageContainer.style.display = "flex";
+        logoMessageContainer.style.justifyContent = "between";
+        logoMessageContainer.style.alignItems = "center";
+        logoMessageContainer.style.height = "25px"; // or any height you want
+        logoMessageContainer.style.minWidth = "50px";
+        logoMessageContainer.style.backgroundColor = "rgba(59, 130, 246, 1)";
+        logoMessageContainer.style.borderRadius = "25px";
+        logoMessageContainer.style.zIndex = '4'
+        logoMessageContainer.appendChild(getLogo("relative"));
+        logoMessageContainer.appendChild(getMessage("Unsafe"));
+
+
+        const textContainer = document.createElement("div");
+        textContainer.style.background = "#023e8a";
+        textContainer.style.borderRadius = "10px";
+        textContainer.style.padding = "8px";
+        textContainer.style.paddingLeft = "10px";
+        textContainer.style.paddingRight = "10px";
+        textContainer.style.position = "absolute";
+        textContainer.style.zIndex = '3'
+        textContainer.style.top = "20px";
+        textContainer.style.left = "10px";
 
         // Create suggestion elements (for example, as list items in a dropdown)
-        let dropdown = document.createElement("div");
-        dropdown.className = "suggestion-dropdown";
         suggestions.forEach((suggestion) => {
             let listItem = document.createElement("p");
             listItem.innerText = suggestion;
-            dropdown.appendChild(listItem);
+            listItem.style.color = "white";
+            listItem.style.fontSize = "15px";
+            listItem.style.fontWeight = "bold";
+            listItem.style.textAlign = "left";
+            listItem.style.maxWidth = maxElementWidth + "px"; 
+            textContainer.appendChild(listItem);
         });
-        overlayButton.appendChild(dropdown);
+
+        SuggestionContainer.appendChild(logoMessageContainer);
+        SuggestionContainer.appendChild(textContainer);
+
+        overlayButton.appendChild(SuggestionContainer);
     }
     if (state === "success") {
         if (currentStatus != state) {
             hideLoading();
+            showSuccess();
             currentStatus = state;
         }
 
         clearTimeout(timeoutId);
         timeoutId = setTimeout(function () {
+            hideSuccess();
             overlayButton.style.display = "none";
         }, 5000);
 

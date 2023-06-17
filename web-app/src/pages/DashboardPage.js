@@ -11,7 +11,7 @@ import TopicViewWidget from "../components/dashboard/TopicViewWidget";
 import CensoredDataWidget from "../components/dashboard/CensoredDataPieChart";
 import SmartWidget from "../components/dashboard/SmartWidget";
 import InputMetricsWidget from "../components/dashboard/InputMetricsWidget";
-import { readFullDatabase } from "../utils/databaseUtils";
+import { getBrowsingHistory, readFullDatabase } from "../utils/databaseUtils";
 
 function DashboardPage() {
   const navigate = useNavigate();
@@ -26,7 +26,9 @@ function DashboardPage() {
       user = {
         image_url: user_data.user.user_metadata.avatar_url,
         name: user_data.user.user_metadata.full_name,
+        uuid: user_data.user.id,
       };
+
     }
   } 
   else {
@@ -37,96 +39,8 @@ function DashboardPage() {
   const [user_session, setUserSession] = useState(null)
   const { supabaseClient } = useContext(ApplicationContext);
   
-  const [websiteVisited, setWebsiteVisited] = useState([
-    {
-      url: "https://github.com/supabase/supabase/issues/2984",
-      topics: ["politics", "sports"],
-      last_visited: "2021-09-01",
-    },
-    {
-      url: "https://huggingface.co/pricing#endpoints",
-      topics: [
-        "politics",
-        
-      ],
-      last_visited: "2021-09-01",
-    },
-    {
-      url: "https://www.twitter.com",
-      topics: ["politics", "sports"],
-      last_visited: "2021-09-01",
-    },
-    {
-      url: "https://www.instagram.com",
-      topics: ["politics", "sports"],
-      last_visited: "2021-09-01",
-    },
-    {
-      url: "https://www.youtube.com",
-      topics: ["politics", "sports"],
-      last_visited: "2021-09-01",
-    },
-    {
-      url: "https://www.reddit.com",
-      topics: ["politics", "sports"],
-      last_visited: "2021-09-01",
-    },
-    {
-      url: "https://www.netflix.com",
-      topics: ["politics", "sports"],
-      last_visited: "2021-09-01",
-    },
-    {
-      url: "https://www.twitter.com",
-      topics: ["politics", "sports"],
-      last_visited: "2021-09-01",
-    },
-    {
-      url: "https://www.instagram.com",
-      topics: ["politics", "sports"],
-      last_visited: "2021-09-01",
-    },
-    {
-      url: "https://www.youtube.com",
-      topics: ["politics", "sports"],
-      last_visited: "2021-09-01",
-    },
-    {
-      url: "https://www.reddit.com",
-      topics: ["politics", "sports"],
-      last_visited: "2021-09-01",
-    },
-    {
-      url: "https://www.netflix.com",
-      topics: ["politics", "sports"],
-      last_visited: "2021-09-01",
-    },
-    {
-      url: "https://www.twitter.com",
-      topics: ["politics", "sports"],
-      last_visited: "2021-09-01",
-    },
-    {
-      url: "https://www.instagram.com",
-      topics: ["politics", "sports"],
-      last_visited: "2021-09-01",
-    },
-    {
-      url: "https://www.youtube.com",
-      topics: ["politics", "sports"],
-      last_visited: "2021-09-01",
-    },
-    {
-      url: "https://www.reddit.com",
-      topics: ["politics", "sports"],
-      last_visited: "2021-09-01",
-    },
-    {
-      url: "https://www.netflix.com",
-      topics: ["politics", "sports"],
-      last_visited: "2021-09-01",
-    },
-  ]);
+  const [websiteVisited, setWebsiteVisited] = useState([]);
+  const [loaded, setLoaded] = useState(false);
 
   const getSession = async () => {
     let session = await supabaseClient?.auth?.getSession();
@@ -140,12 +54,29 @@ function DashboardPage() {
 
   const getData = async () => {
     // fetch database objects
-    let { statusCode, body } = await readFullDatabase(
-      "Browsing Activities Table"
-    );
+  //  let {statusCode, body} = await getBrowsingHistory()
+    if (user !== null){
+      let { statusCode, body } = await getBrowsingHistory(user.uuid);
 
-    if (statusCode === 200) {
-      console.log(body.data);
+      if (statusCode === 200){
+        body.data.map((item) => {
+          console.log(item)
+          let item_created_at = new Date(item.created_at)
+          // parse into date object
+          item.created_at = item_created_at.toLocaleDateString("en-US", {
+            weekday: "long",
+            year: "numeric",
+            month: "long",
+            day: "numeric",
+          });
+
+          return setWebsiteVisited((websiteVisited) => [...websiteVisited, {url: item.website_url, last_visited: item.created_at, topics: item.topics}])
+        })
+        setLoaded(true);
+      }
+      else if (statusCode === 404){
+        setLoaded(true);
+      }
     }
 
   }
@@ -218,7 +149,7 @@ function DashboardPage() {
           title="Recent Site History"
           extra="px-6 lg:col-span-5 sm:auto-cols-auto row-span-4"
         >
-          <HistoryTable websiteVisited={websiteVisited}></HistoryTable>
+          <HistoryTable websiteVisited={websiteVisited} isLoaded={loaded}></HistoryTable>
         </MetricCard>
         <MetricCard
           title=""

@@ -7,7 +7,6 @@ const client = supabase.createClient(
 
 const getBrowsingHistory = async (user_id) => {
   const TABLE_NAME = "Browsing Activities Table"
-
   let { data, error } = await client
     .from(TABLE_NAME)
     .select("*")
@@ -22,6 +21,7 @@ const getBrowsingHistory = async (user_id) => {
     }
   }
   else {
+    console.log(data)
     if (data.length > 0) {
       return {
         statusCode: 200,
@@ -77,4 +77,4 @@ const readFullDatabase = async (tableName) => {
   }
 };
 
-export { readFullDatabase };
+export { readFullDatabase, getBrowsingHistory };

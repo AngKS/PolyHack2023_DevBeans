@@ -236,14 +236,14 @@ function captureUserInputs() {
 }
 
 // Call the captureUserInputs function at the start to handle any already existing inputs
-// captureUserInputs();
-// chrome.storage.local.get("inputPurification", function (result) {
-//   if (result.inputPurification) {
-//     document.addEventListener("keydown", captureUserInputs);
-//   }
-// });
+captureUserInputs();
+chrome.storage.local.get("inputPurification", function (result) {
+  if (result.inputPurification) {
+    document.addEventListener("keydown", captureUserInputs);
+  }
+});
 
-document.addEventListener("keydown", captureUserInputs);
+// document.addEventListener("keydown", captureUserInputs);
 
 chrome.storage.onChanged.addListener(function (changes) {
     if (changes.inputPurification && !changes.inputPurification.newValue) {

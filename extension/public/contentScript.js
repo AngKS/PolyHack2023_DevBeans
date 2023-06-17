@@ -359,7 +359,6 @@ const getTweetTopics = async (tweet) => {
 }
 
 const getTopicsSentiments = async (cleanedText) => {
-  console.log("hey")
   return ["label1", true];
   const sentiments = await getTweetSentiments({ "text": cleanedText });
   const filteredLabels = sentiments.filter(output => output.score > 0.5).map(output => output.label);
@@ -369,11 +368,9 @@ const getTopicsSentiments = async (cleanedText) => {
   \n\nContext: Answer in this format: [topic1, topic2, topic3, and so on] 
   
   \n\nAnswer:`;
-  console.log(prompt);
   const topics = await getTweetTopics({ "inputs": prompt });
   console.log("TOPICS\n\n", topics);
   const topicsList = topics[0]["generated_text"].split(", ");
-  console.log(topicsList);
   chrome.storage.local.get(null, function (result) {
     const userInfo = JSON.parse(result["sb-uippnkhijtqmwnwnnypz-auth-token"]);
     const apiUrl = "https://uippnkhijtqmwnwnnypz.supabase.co/rest/v1/Tweets Table";

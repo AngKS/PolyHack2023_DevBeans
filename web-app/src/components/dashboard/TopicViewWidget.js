@@ -20,10 +20,17 @@ const TopicViewWidget = (props) => {
         </div>
       )
     }
+    else if (props.topics.length === 0){
+      return (
+        <div className="flex flex-col justify-center w-full h-full">
+              <span className="text-sm px-2 py-1 text-slate-500 mx-auto rounded-lg">No data available</span>
+        </div>
+      )
+    }
 
     return (
       <div className="flex flex-col w-full h-full">
-        <ol type="1" className="h-full overflow-y-scroll w-ful mt-1">
+        <ol type="1" className="h-full w-full mt-1">
           {props.topics.map((topic, index) => {
             return (
               <div key={index} className="flex justify-between mb-1 text-slate-700">

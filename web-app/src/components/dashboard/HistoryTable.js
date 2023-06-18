@@ -122,12 +122,17 @@ const HistoryTable = ({websiteVisited, isLoaded}) => {
       return (
         <div className="w-full h-full flex-grow">
           <div className="flex h-full flex-col items-center justify-center">
-            <SlSpinner
-              style={{ fontSize: "3rem" }}
-              className="m-auto"
-            ></SlSpinner>
+            
+            <span className="text-xl font-medium text-slate-500">
+              No data available.
+            </span>
           </div>
         </div>
+      );
+    }
+    else if (!isLoadedState) {
+      return (
+        <SlSpinner style={{ fontSize: "3rem" }} className="m-auto"></SlSpinner>
       );
     }
 

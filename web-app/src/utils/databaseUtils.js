@@ -82,7 +82,7 @@ const getUserTweets = async (user_id) => {
 
     .from(TABLE_NAME)
     .select("*")
-    .eq("user_id", "a02ed4c8-abdd-4adf-834b-7d90452c81bd");
+    .eq("user_id", user_id)
 
   if (error) {
     return {
@@ -97,14 +97,7 @@ const getUserTweets = async (user_id) => {
   else{
 
     let total = data.length
-    if (total === 0){
-      return {
-        statusCode: 400,
-        body: {
-          data: null
-        },
-      };
-    }
+
     let count = 0
     let TOPICS = {}
 
@@ -131,7 +124,14 @@ const getUserTweets = async (user_id) => {
     })
 
     // calculate percentage
-    let percentage = (count / total) * 100
+    let percentage
+
+    if (total === 0){
+      percentage = 0
+    }
+    else{
+      percentage = (count / total) * 100
+    }
 
     // sort TOPICS, get top 3
     let sorted = Object.keys(TOPICS).sort(function(a,b){return TOPICS[b]-TOPICS[a]})

@@ -29,8 +29,10 @@ const Charts = (props) => {
         let date = new Date(item.created_at);
         let date_string = date.toLocaleDateString("en-US", {
           year: "numeric",
-          month: "long",
+          month: "numeric",
           day: "numeric",
+          hour: "numeric",
+          minute: "numeric",
         });
         labels.push(date_string);
       }
@@ -62,7 +64,7 @@ const Charts = (props) => {
       <SlTab active slot="nav" panel="topics-censored">
         Topics Censored over time
       </SlTab>
-      <SlTab slot="nav" panel="content-breakdown">
+      <SlTab slot="nav" panel="content-breakdown" disabled>
         <span className="">Content Breakdown</span>
       </SlTab>
       <SlTab slot="nav" panel="site-most-visited" disabled>

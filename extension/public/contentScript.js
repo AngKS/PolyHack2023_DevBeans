@@ -326,27 +326,25 @@ function captureUserInputs() {
 
 
 // Call the captureUserInputs function at the start to handle any already existing inputs
-// chrome.storage.local.get("inputPurification", function (result) {
-//     if (result.inputPurification) {
-//         document.addEventListener("keydown", captureUserInputs);
-//     }
-// });
+chrome.storage.local.get("inputPurification", function (result) {
+    if (result.inputPurification) {
+        document.addEventListener("keydown", captureUserInputs);
+    }
+});
 
-// chrome.storage.onChanged.addListener(function (changes) {
-//     if (changes.inputPurification && !changes.inputPurification.newValue) {
-//         // If inputPurification becomes false, remove the event listener
-//         console.log("removed");
-//         document.removeEventListener("keydown", captureUserInputs);
-//     } else if (
-//         !changes.inputPurification &&
-//         changes.inputPurification.newValue
-//     ) {
-//         // If inputPurification becomes true, add the event listener
-//         document.addEventListener("keydown", captureUserInputs);
-//     }
-// });
+chrome.storage.onChanged.addListener(function (changes) {
+    if (changes.inputPurification && !changes.inputPurification.newValue) {
+        // If inputPurification becomes false, remove the event listener
+        document.removeEventListener("keydown", captureUserInputs);
+    } else if (
+        !changes.inputPurification &&
+        changes.inputPurification.newValue
+    ) {
+        // If inputPurification becomes true, add the event listener
+        document.addEventListener("keydown", captureUserInputs);
+    }
+});
 
-document.addEventListener("keydown", captureUserInputs);
 
 // To retrieve token from local storage
 function retrieveLocalStorageData() {
@@ -453,7 +451,6 @@ const getTweetTopics = async (tweet) => {
 };
 
 const getTopicsSentiments = async (cleanedText) => {
-  return ["Negative", true];
   const sentiments = await getTweetSentiments({ "text": cleanedText });
   const filteredLabels = sentiments.filter(output => output.score > 0.5).map(output => output.label);
   const isFlagged = filteredLabels.length > 0;
@@ -462,7 +459,7 @@ const getTopicsSentiments = async (cleanedText) => {
   \n\nContext: Answer in this format: [topic1, topic2, topic3, and so on] 
   
   \n\nAnswer:`;
-    const topics = await getTweetTopics({ inputs: prompt });
+    const topics = await getTweetTopics({ "inputs": prompt });
     console.log("TOPICS\n\n", topics);
     const topicsList = topics[0]["generated_text"].split(", ");
     chrome.storage.local.get(null, function (result) {

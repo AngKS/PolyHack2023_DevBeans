@@ -28,7 +28,7 @@ function Pricing() {
         color="#FFFFFF"
         name="Basic" 
         description="Improved features from the free plan" 
-        price="4.99"
+        price="1.29"
         features={
           ['Basic Tracking/AI',
            'Basic Analytics',
@@ -46,7 +46,7 @@ function Pricing() {
         color="#FFFFFF" 
         name="Premium" 
         description="Advanced features for premium users"
-        price="5.99"
+        price="1.99"
         features={
           ['Faster Advanced Tracking/AI',
            'Premium Analytics',

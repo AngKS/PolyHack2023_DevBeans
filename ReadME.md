@@ -1,5 +1,10 @@
 
 <h1 align="center">Mindful Beans: Serenity in Every Click</h1>
+<!-- add image -->
+<p align="center">
+  <img src="https://github.com/AngKS/PolyHack2023_DevBeans/blob/main/web-app/src/assets/logo.png?raw=true" alt="Mindful Beans Logo" width="200" height="200">
+</p>
+
 
 [![Netlify Status](https://api.netlify.com/api/v1/badges/fe57b83f-1dbb-4c06-b1e3-4d549aaea540/deploy-status)](https://app.netlify.com/sites/mindful-beans/deploys)
 
@@ -20,6 +25,10 @@ Mindful Beans is a web application that allows users to track their web browsing
 - [ ] Most view site contents
 - [ ] Censored content summary
 - [ ] Censored word frequency
+
+## Useful Links:
+- Project Implementation Documentations - ([link](https://drive.google.com/drive/folders/1zOTAvzbo75oE4TX666mddfPJb_Xv3MTc?usp=drive_link))
+- Pitch Deck - ([link](https://www.canva.com/design/DAFlfsriujw/E5X-lq2XAquADYbNl2DUbg/view?utm_content=DAFlfsriujw&utm_campaign=designshare&utm_medium=link&utm_source=publishsharelink))
 
 ## Contributors
 - [Choon Wei](www.github.com/choonwei0214)

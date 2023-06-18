@@ -55,7 +55,7 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
                     text: request.inputValue,
                 };
 
-                fetch("http://localhost:5000/predict", {
+                fetch('http://54.255.188.197:5000/predict', {
                     method: "POST",
                     headers: {
                         "Content-Type": "application/json",

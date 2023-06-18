@@ -159,7 +159,7 @@ function updateButtonState(state, suggestions = []) {
 
 
       textContainer.appendChild(listItem);
-      if (suggestion_count < 3) {
+      if (suggestion_count < suggestions.length) {
         let divider = document.createElement("hr");
         divider.classList.add("divider");
         textContainer.appendChild(divider);

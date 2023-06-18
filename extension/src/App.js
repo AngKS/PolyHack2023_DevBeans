@@ -98,7 +98,7 @@ function App() {
         // Get filteredContentCount
         const now = new Date();
         const currentDate = now.toISOString().split('T')[0];
-        const apiUrl2 = `https://uippnkhijtqmwnwnnypz.supabase.co/rest/v1/Tweets Table?user_id=eq.${"b5b97614-f46a-4316-bb7b-55d68d12002b"}&select=*`;
+        const apiUrl2 = `https://uippnkhijtqmwnwnnypz.supabase.co/rest/v1/Tweets Table?user_id=eq.${userInfo.user.id}&select=*`;
         fetch(apiUrl2, {
           headers: {
             'apikey': apiKey,

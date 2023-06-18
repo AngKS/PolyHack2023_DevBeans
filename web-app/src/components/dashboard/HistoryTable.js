@@ -39,7 +39,15 @@ const tableRow = (data, data_full, key) => {
     let url = data.url
     //  
 
-    console.log(url)
+    // convert time spent from miliseconds to appropriate format
+    let time_spent = data.time_spent
+    let hours = Math.floor(time_spent / 3600000);
+    let minutes = Math.floor((time_spent % 3600000) / 60000);
+    let seconds = Math.floor(((time_spent % 3600000) % 60000) / 1000);
+    let time_spent_formatted = `${hours}h ${minutes}m ${seconds}s`
+
+
+
 
     if (site) {
       
@@ -55,23 +63,11 @@ const tableRow = (data, data_full, key) => {
               </a>
             </td>
             <td
-              className={`py-2 px-1 text-slate-700 font-medium overflow-x-scroll max-w-[${
+              className={`py-2 px-1 text-slate-700 font-medium text-sm overflow-x-scroll max-w-[${
                 data_full ? "100%" : "170px"
               }] w-[${data_full ? "100%" : "170px"}]`}
             >
-              {/* {data.topics.map((topic, key) => {
-                return (
-                  <span
-                    key={key}
-                    className="p-2 rounded-lg text-xs text-blue-500 bg-white mx-2"
-                  >
-                    {topic}
-                  </span>
-                );
-              })} */}
-              <a href="www.github.com/angks">
-              Click me
-              </a>
+              {time_spent_formatted}
             </td>
             <td className="py-2 px-1 w-fit">
               <span className=" text-slate-500 text-xs no-wrap">
@@ -94,21 +90,12 @@ const tableRow = (data, data_full, key) => {
               </a>
             </td>
             <td
-              className={`py-2 px-1 text-slate-700 font-medium overflow-x-scroll max-w-[${
+              className={`py-2 px-1 text-slate-700 font-medium text-sm overflow-x-scroll max-w-[${
                 data_full ? "100%" : "170px"
               }] w-[${data_full ? "100%" : "170px"}]`}
             >
-              {/* {data.topics.map((topic, key) => {
-                return (
-                  <span
-                    key={key}
-                    className="p-2 rounded-lg text-xs text-blue-500 bg-white mx-2"
-                  >
-                    {topic}
-                  </span>
-                );
-              })} */}
-              -
+              
+              {time_spent_formatted}
             </td>
             <td className="py-2 px-1 w-fit">
               <span className=" text-slate-500 text-xs no-wrap">

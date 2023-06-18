@@ -453,13 +453,11 @@ const getTweetTopics = async (tweet) => {
 };
 
 const getTopicsSentiments = async (cleanedText) => {
-    return ["label1", true];
-    const sentiments = await getTweetSentiments({ text: cleanedText });
-    const filteredLabels = sentiments
-        .filter((output) => output.score > 0.5)
-        .map((output) => output.label);
-    const isFlagged = filteredLabels.length > 0;
-    const prompt = `Question: What are the topics in this post: ${cleanedText} 
+  return ["Negative", true];
+  const sentiments = await getTweetSentiments({ "text": cleanedText });
+  const filteredLabels = sentiments.filter(output => output.score > 0.5).map(output => output.label);
+  const isFlagged = filteredLabels.length > 0;
+  const prompt = `Question: What are the topics in this post: ${cleanedText} 
   
   \n\nContext: Answer in this format: [topic1, topic2, topic3, and so on] 
   

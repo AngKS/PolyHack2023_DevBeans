@@ -20,7 +20,7 @@ function PricingPage() {
         <div className="mb-4 mt-8 text-center">
           <h1 className="mb-4 text-6xl">Pricing</h1>
           <p className="text-lg">
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam
+            Choose a plan that is right for you.
           </p>
         </div>
         <div className="min-h-screen flex flex-col gap-24 justify-around">

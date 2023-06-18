@@ -1,5 +1,5 @@
 let timeoutId = null;
-let maxElementWidth = document.documentElement.clientWidth * 0.8;
+let maxElementWidth = window.innerWidth;
 const activeElement = document.activeElement;
 const apiKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InVpcHBua2hpanRxbXdud25ueXB6Iiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTY4NjM4ODMyNiwiZXhwIjoyMDAxOTY0MzI2fQ.6zRD9gLScuHIPy7k2R0F6z1jdY9wJcRN6esn0oF4DLk";
 
@@ -136,11 +136,12 @@ function updateButtonState(state, suggestions = []) {
     overlayButton.style.background = "RGBA(241, 252, 254, 0)";
     const logoMessageContainer = document.createElement("div");
     logoMessageContainer.classList.add("logo_message_container")
+    // logoMessageContainer.style.maxWidth = parseInt(maxWidth * 0.8).toString() + "px";
     logoMessageContainer.appendChild(getLogo("relative"));
     logoMessageContainer.appendChild(getMessage("Unsafe"));
 
     const textContainer = document.createElement("div");
-    textContainer.classList.add("suggested_test_container")
+    textContainer.classList.add("suggested_text_container")
 
     // Create suggestion elements (for example, as list items in a dropdown)
     let suggestion_count = 1;
@@ -245,19 +246,21 @@ chrome.storage.local.get("inputPurification", function (result) {
 
 // document.addEventListener("keydown", captureUserInputs);
 
-chrome.storage.onChanged.addListener(function (changes) {
-  if (changes.inputPurification && !changes.inputPurification.newValue) {
-    // If inputPurification becomes false, remove the event listener
-    console.log("removed");
-    document.removeEventListener("keydown", captureUserInputs);
-  } else if (
-    !changes.inputPurification &&
-    changes.inputPurification.newValue
-  ) {
-    // If inputPurification becomes true, add the event listener
-    document.addEventListener("keydown", captureUserInputs);
-  }
-});
+// chrome.storage.onChanged.addListener(function (changes) {
+//   if (changes.inputPurification && !changes.inputPurification.newValue) {
+//     // If inputPurification becomes false, remove the event listener
+//     console.log("removed");
+//     document.removeEventListener("keydown", captureUserInputs);
+//   } else if (
+//     !changes.inputPurification &&
+//     changes.inputPurification.newValue
+//   ) {
+//     // If inputPurification becomes true, add the event listener
+//     document.addEventListener("keydown", captureUserInputs);
+//   }
+// });
+
+document.addEventListener("keydown", captureUserInputs);
 
 // To retrieve token from local storage
 function retrieveLocalStorageData() {

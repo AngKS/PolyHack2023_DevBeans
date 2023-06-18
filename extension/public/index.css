@@ -63,7 +63,7 @@
     margin-bottom: 3px;
   }
 
-.suggested_test_container {
+.suggested_text_container {
     background-color: #023e8a;
     border-radius: 10px;
     position: absolute;
@@ -73,6 +73,7 @@
     padding: 10px;
     padding-top: 6px;
     padding-bottom: 6px;
+    width: 300px;
 }
 
 .suggested_lines {
@@ -84,7 +85,7 @@
     padding-bottom: 6px;
     padding-left: 10px;
     padding-right: 10px;
-    border-radius: 10px;
+    border-radius: 10px;  
 }
 
 .suggested_lines:hover {

@@ -11,8 +11,8 @@ import TopicViewWidget from "../components/dashboard/TopicViewWidget";
 import CensoredDataWidget from "../components/dashboard/CensoredDataPieChart";
 import SmartWidget from "../components/dashboard/SmartWidget";
 import InputMetricsWidget from "../components/dashboard/InputMetricsWidget";
-import { getBrowsingHistory, getUserInputMetrics, readFullDatabase } from "../utils/databaseUtils";
-import { SlBadge } from "@shoelace-style/shoelace/dist/react";
+import { getBrowsingHistory, getUserInputMetrics, getUserTweets, readFullDatabase } from "../utils/databaseUtils";
+import { SlBadge, SlSpinner } from "@shoelace-style/shoelace/dist/react";
 
 function DashboardPage() {
   const navigate = useNavigate();
@@ -45,12 +45,13 @@ function DashboardPage() {
 
   const [userInputMetrics, setUserInputMetrics] = useState(0);
 
+  const [userTweets, setUserTweets] = useState(null);
+
   const getSession = async () => {
     let session = await supabaseClient?.auth?.getSession();
     if (session) {
       // check if session has expired
       // const expire_at = 
-      console.log(session)
       setUserSession(session.data.session)
     }
   }
@@ -63,7 +64,6 @@ function DashboardPage() {
 
       if (statusCode === 200){
         body.data.map((item) => {
-          console.log(item)
           let item_created_at = new Date(item.created_at)
           // parse into date object
           item.created_at = item_created_at.toLocaleDateString("en-US", {
@@ -89,7 +89,6 @@ function DashboardPage() {
       let {statusCode, body} = await getUserInputMetrics(user.uuid)
 
       if (statusCode === 200){
-        console.log(body.data)
         return setUserInputMetrics(body.percentage.toFixed(1))
       }
       else{
@@ -98,12 +97,32 @@ function DashboardPage() {
     }
   }
 
+  const userCensoredData_TopicData = async () => {
+    if (user !== null){
+      let {statusCode, body} = await getUserTweets(user.uuid)
+      if (statusCode === 200){
+        return setUserTweets(body)
+      }
+      else{
+        return setUserTweets({
+          data: null,
+          payload: null,
+          percentage: 0,
+          top3: null
+
+        })
+      }
+    }
+      
+  }
+
   useEffect(() => {
     // 👇️ scroll to top on page load
     window.scrollTo({ top: 0, left: 0, behavior: "smooth" });
 
     getBrowsingData();
     userReccomendedTextsMetrics();
+    userCensoredData_TopicData()
 
     const header_height = document.getElementById("navbar").clientHeight;
     // get screenHeigh
@@ -127,7 +146,6 @@ function DashboardPage() {
           beta="true"
           extra="px-6 lg:col-span-3 sm:auto-cols-auto row-span-1"
         >
-
           <SmartWidget />
         </MetricCard>
         <MetricCard
@@ -135,27 +153,18 @@ function DashboardPage() {
           extra="px-6 lg:col-span-3 sm:auto-cols-auto row-span-1"
         >
           <TopicViewWidget
-            topics={[
-              {
-                name: "Politics",
-                count: 10,
-              },
-              {
-                name: "Sports",
-                count: 10,
-              },
-              {
-                name: "Entertainment",
-                count: 10,
-              },
-            ]}
+            topics={userTweets == null ? null : userTweets.top3}
           />
         </MetricCard>
         <MetricCard
           title="(%) Censored Data"
           extra="px-6 lg:col-span-3 sm:auto-cols-auto row-span-1"
         >
-          <CensoredDataWidget censored_content_count={33} />
+          <CensoredDataWidget
+            censored_content_count={
+              userTweets == null ? 0 : userTweets.percentage.toFixed(1)
+            }
+          />
         </MetricCard>
         <MetricCard
           title="Your texts were"
@@ -178,7 +187,18 @@ function DashboardPage() {
           title=""
           extra="px-6 lg:col-span-7 sm:auto-cols-auto row-span-4"
         >
-          <Charts />
+          {userTweets === null || userTweets.data.length <= 0 ? (
+            <div className="flex justify-center items-center h-full w-full">
+              <div className="flex flex-col justify-center items-center">
+                <SlSpinner style={{"fontSize": "3rem"}} />
+                <p className="text-gray-900 text-lg font-semibold mt-4">
+                  Loading...
+                </p>
+              </div>
+            </div>
+          ) : (
+            <Charts data={userTweets === null ? [] : userTweets.data} />
+          )}
         </MetricCard>
       </section>
     </div>

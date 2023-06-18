@@ -1,4 +1,5 @@
-.env
+.env.dev
+.env.prod
 .idea
 deploy.py
 model_deployment/

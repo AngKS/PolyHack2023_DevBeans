@@ -67,6 +67,36 @@ def predict():
 
         
         return jsonify(response)
+    
+@app.route('/classify', methods=['POST'])
+def classify():
+    if request.method == 'POST':
+        data = request.get_json()
+        text = data.get('text')
+        
+        # Ensure that a text was provided
+        if not text:
+            return jsonify({'error': 'no text provided'}), 400
+
+        inputs = tokenizer(text, return_tensors='pt', truncation=True, padding=True)
+        outputs = model(**inputs)
+
+        probabilities = torch.nn.functional.softmax(outputs.logits, dim=-1)
+
+        # Apply threshold
+        threshold = 0.5
+        predictions = (probabilities > threshold).int()
+
+        # Get labels
+        predicted_labels = [model.config.id2label[i] for i, predicted in enumerate(predictions[0]) if predicted == 1]
+
+        # Convert the prediction to a JSON response
+        response = {
+            'labels': predicted_labels
+        }
+
+        
+        return jsonify(response)
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000)  # listens on port 5000

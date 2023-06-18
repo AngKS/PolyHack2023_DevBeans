@@ -20,7 +20,7 @@ const data = {
     },
   ],
 };
-const LineChart = () => {
+const LineChart = (props) => {
   return (
     <div className="h-full w-auto">
       <Line data={data} options={chartOptions} />

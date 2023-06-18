@@ -166,31 +166,31 @@ chrome.tabs.onActivated.addListener(function (activeInfo) {
         chrome.storage.local.get(null, function (result) {
             console.log(previousTabUrl, timeSpent)
             if (timeSpent > 1000) {
-                // const userInfo = JSON.parse(result["sb-uippnkhijtqmwnwnnypz-auth-token"]);
-                // const apiUrl = "https://uippnkhijtqmwnwnnypz.supabase.co/rest/v1/Browsing Activities Table";
-                // const postData = {
-                //     "website_url": previousTabUrl,
-                //     "time_spent": timeSpent,
-                //     "user_id": userInfo.user.id
-                // };
-                // fetch(apiUrl, {
-                //     method: 'POST',
-                //     headers: {
-                //         'apikey': apiKey,
-                //         'Authorization': `Bearer ${apiKey}`,
-                //         'Content-Type': 'application/json',
-                //         'Prefer': 'return=minimal',
-                //     },
-                //     body: JSON.stringify(postData),
-                // })
-                //     .then(response => {
-                //         console.log(response);
-                //         // Handle the response if needed
-                //     })
-                //     .catch(error => {
-                //         console.error(error);
-                //         // Handle the error if needed
-                //     });
+                const userInfo = JSON.parse(result["sb-uippnkhijtqmwnwnnypz-auth-token"]);
+                const apiUrl = "https://uippnkhijtqmwnwnnypz.supabase.co/rest/v1/Browsing Activities Table";
+                const postData = {
+                    "website_url": previousTabUrl,
+                    "time_spent": timeSpent,
+                    "user_id": userInfo.user.id
+                };
+                fetch(apiUrl, {
+                    method: 'POST',
+                    headers: {
+                        'apikey': apiKey,
+                        'Authorization': `Bearer ${apiKey}`,
+                        'Content-Type': 'application/json',
+                        'Prefer': 'return=minimal',
+                    },
+                    body: JSON.stringify(postData),
+                })
+                    .then(response => {
+                        console.log(response);
+                        // Handle the response if needed
+                    })
+                    .catch(error => {
+                        console.error(error);
+                        // Handle the error if needed
+                    });
             }
         });
     }
@@ -219,31 +219,31 @@ chrome.webNavigation.onCompleted.addListener(function (details) {
         chrome.storage.local.get(null, function (result) {
             console.log(previousTabUrl, timeSpent)
             if (timeSpent > 1000) {
-                // const userInfo = JSON.parse(result["sb-uippnkhijtqmwnwnnypz-auth-token"]);
-                // const apiUrl = "https://uippnkhijtqmwnwnnypz.supabase.co/rest/v1/Browsing Activities Table";
-                // const postData = {
-                //     "website_url": previousTabUrl,
-                //     "time_spent": timeSpent,
-                //     "user_id": userInfo.user.id
-                // };
-                // fetch(apiUrl, {
-                //     method: 'POST',
-                //     headers: {
-                //         'apikey': apiKey,
-                //         'Authorization': `Bearer ${apiKey}`,
-                //         'Content-Type': 'application/json',
-                //         'Prefer': 'return=minimal',
-                //     },
-                //     body: JSON.stringify(postData),
-                // })
-                //     .then(response => {
-                //         console.log(response);
-                //         // Handle the response if needed
-                //     })
-                //     .catch(error => {
-                //         console.error(error);
-                //         // Handle the error if needed
-                //     });
+                const userInfo = JSON.parse(result["sb-uippnkhijtqmwnwnnypz-auth-token"]);
+                const apiUrl = "https://uippnkhijtqmwnwnnypz.supabase.co/rest/v1/Browsing Activities Table";
+                const postData = {
+                    "website_url": previousTabUrl,
+                    "time_spent": timeSpent,
+                    "user_id": userInfo.user.id
+                };
+                fetch(apiUrl, {
+                    method: 'POST',
+                    headers: {
+                        'apikey': apiKey,
+                        'Authorization': `Bearer ${apiKey}`,
+                        'Content-Type': 'application/json',
+                        'Prefer': 'return=minimal',
+                    },
+                    body: JSON.stringify(postData),
+                })
+                    .then(response => {
+                        console.log(response);
+                        // Handle the response if needed
+                    })
+                    .catch(error => {
+                        console.error(error);
+                        // Handle the error if needed
+                    });
             }
         });
 

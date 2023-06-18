@@ -1,6 +1,6 @@
 import {React, useEffect, useState} from "react";
 import { Navigate, Link } from "react-router-dom";
-import { SlBadge, SlButton, SlIcon } from "@shoelace-style/shoelace/dist/react";
+import { SlBadge, SlButton, SlIcon, SlSpinner } from "@shoelace-style/shoelace/dist/react";
 
 const tableRow = (data, data_full, key) => {
     const knownSites = [
@@ -113,7 +113,6 @@ const HistoryTable = ({websiteVisited, isLoaded}) => {
 
     const [topicExpanded, setTopicExpanded] = useState(false);
     const [isLoadedState, setIsLoadedState] = useState(false);
-    console.log(websiteVisited)
 
     useEffect(() => {
       setIsLoadedState(isLoaded);
@@ -123,7 +122,10 @@ const HistoryTable = ({websiteVisited, isLoaded}) => {
       return (
         <div className="w-full h-full flex-grow">
           <div className="flex h-full flex-col items-center justify-center">
-            <span>No Data found</span>
+            <SlSpinner
+              style={{ fontSize: "3rem" }}
+              className="m-auto"
+            ></SlSpinner>
           </div>
         </div>
       );

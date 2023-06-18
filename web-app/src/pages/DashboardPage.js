@@ -87,7 +87,6 @@ function DashboardPage() {
   const userReccomendedTextsMetrics = async () => {
     if (user !== null){
       let {statusCode, body} = await getUserInputMetrics(user.uuid)
-
       if (statusCode === 200){
         return setUserInputMetrics(body.percentage.toFixed(1))
       }
@@ -109,7 +108,6 @@ function DashboardPage() {
           payload: null,
           percentage: 0,
           top3: null
-
         })
       }
     }
@@ -162,7 +160,7 @@ function DashboardPage() {
         >
           <CensoredDataWidget
             censored_content_count={
-              userTweets == null ? 0 : userTweets.percentage.toFixed(1)
+              userTweets == null ? 0 : userTweets.percentage?.toFixed(1)
             }
           />
         </MetricCard>
@@ -177,6 +175,7 @@ function DashboardPage() {
         <MetricCard
           title="Recent Site History"
           extra="px-6 lg:col-span-5 sm:auto-cols-auto row-span-4"
+          child_attrs="overflow-y-scroll"
         >
           <HistoryTable
             websiteVisited={websiteVisited}
@@ -190,7 +189,7 @@ function DashboardPage() {
           {userTweets === null || userTweets.data.length <= 0 ? (
             <div className="flex justify-center items-center h-full w-full">
               <div className="flex flex-col justify-center items-center">
-                <SlSpinner style={{"fontSize": "3rem"}} />
+                <SlSpinner style={{ fontSize: "3rem" }} />
                 <p className="text-gray-900 text-lg font-semibold mt-4">
                   Loading...
                 </p>

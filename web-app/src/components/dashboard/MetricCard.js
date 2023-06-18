@@ -25,20 +25,15 @@ function MetricCard(props) {
       <div className="relative flex items-center justify-between">
         <div className="text-sm font-semibold text-black w-full justify-between flex items-center">
           {title}
-          {
-            props.beta === "true" ? (
-              <SlBadge variant="warning" type="info">
-                Beta
-               </SlBadge>
-            ) : null
-          }
+          {props.beta === "true" ? (
+            <SlBadge variant="warning" type="info">
+              Beta
+            </SlBadge>
+          ) : null}
         </div>
       </div>
       <></>
-      <div
-        ref={cardRef}
-        className={`flex-grow h-inherit overflow-y-scroll`}
-      >
+      <div ref={cardRef} className={`flex-grow h-inherit ` + props.child_attrs}>
         {children}
       </div>
     </div>

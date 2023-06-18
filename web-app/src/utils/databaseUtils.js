@@ -82,7 +82,7 @@ const getUserTweets = async (user_id) => {
 
     .from(TABLE_NAME)
     .select("*")
-    .eq("user_id", user_id);
+    .eq("user_id", "a02ed4c8-abdd-4adf-834b-7d90452c81bd");
 
   if (error) {
     return {
@@ -97,8 +97,15 @@ const getUserTweets = async (user_id) => {
   else{
 
     let total = data.length
+    if (total === 0){
+      return {
+        statusCode: 400,
+        body: {
+          data: null
+        },
+      };
+    }
     let count = 0
-
     let TOPICS = {}
 
     data.map((item) => {
@@ -143,7 +150,8 @@ const getUserTweets = async (user_id) => {
         data: data,
         payload: JSON.stringify(data),
         percentage: percentage,
-        top3: top3
+        top3: top3,
+        allTopics: TOPICS
       }
     }
 

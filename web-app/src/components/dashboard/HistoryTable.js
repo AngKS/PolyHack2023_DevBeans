@@ -152,7 +152,7 @@ const HistoryTable = ({websiteVisited, isLoaded}) => {
           </tr>
         </thead>
 
-        <tbody>
+        <tbody className="">
           {isLoadedState ? (
             websiteVisited.map((item, key) => {
               return tableRow(item, topicExpanded, key);

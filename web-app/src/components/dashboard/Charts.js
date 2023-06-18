@@ -1,42 +1,22 @@
 import React, { useEffect, useState } from "react";
 import Chart from "chart.js/auto";
 import {
-  SlBadge,
-  SlSpinner,
   SlTab,
   SlTabGroup,
-  SlTabPanel,
 } from "@shoelace-style/shoelace/dist/react";
 import { Line } from "react-chartjs-2";
 
-import PieChart from "./PieChart";
 import {chartOptions} from "./options/ChartOptions"
 
 const Charts = (props) => {
-
-
   // console.log(props.data)
   const [parsedData, setParseData] = useState({
     labels: [],
     datasets: []
   })
 
-  const aggregateData = () => {
-
-    parsedData.labels.forEach((item) => {
-      
-
-      
-
-    })
-
-
-
-
-  }
-
   useEffect(() => {
-    if (props.data.length < 0 || props.data == null) {
+    if (props.data == null || props.data.length < 0) {
       return;
     }
     let labels = [];
@@ -94,7 +74,6 @@ const Charts = (props) => {
         name="topics-censored"
         className="flex items-center justify-center h-full w-full"
       >
-        
         {
           parsedData.labels.length > 0 ?
           <Line data={parsedData} options={chartOptions} />
@@ -110,7 +89,9 @@ const Charts = (props) => {
       <sl-tab-panel name="site-most-visited">
         <span>Panel under Construction</span>
       </sl-tab-panel>
-      <sl-tab-panel name="content-breakdown"></sl-tab-panel>
+      <sl-tab-panel name="content-breakdown">
+
+      </sl-tab-panel>
     </SlTabGroup>
   );
 };

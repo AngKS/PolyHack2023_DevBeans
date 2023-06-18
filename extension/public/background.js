@@ -19,7 +19,7 @@ setInterval(function () {
 }, 1000);
 
 chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
-    console.log("Received message:", request);
+    // console.log("Received message:", request);
 
     if (request.pageContent) {
         chrome.storage.local.set(
@@ -55,7 +55,7 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
                     text: request.inputValue,
                 };
 
-                fetch('http://54.255.188.197:5000/predict', {
+                fetch('http://13.212.238.35:5000/predict', {
                     method: "POST",
                     headers: {
                         "Content-Type": "application/json",

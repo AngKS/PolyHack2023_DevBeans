@@ -24,7 +24,7 @@ def get_suggestions(sentence):
     response = openai.ChatCompletion.create(
       model="gpt-3.5-turbo",
       messages=[
-            {"role": "system", "content": 'rewrite me a json, that has three sentence suggestions to make the following sentence none toxic, but convey the same emotion, in the format: {"suggestions": [ <rewritten sentence>, <rewritten sentence> ]} '},
+            {"role": "system", "content": 'rewrite me a json, that has three sentence paraphrased to make the following sentence none toxic, but convey the same emotion, in the format: {"suggestions": [ <rewritten sentence>, <rewritten sentence> ]} '},
             {"role": "user", "content": sentence},
         ]
     )

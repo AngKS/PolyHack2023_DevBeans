@@ -186,7 +186,7 @@ function DashboardPage() {
           title=""
           extra="px-6 lg:col-span-7 sm:auto-cols-auto row-span-4"
         >
-          {userTweets === null || userTweets.data.length <= 0 ? (
+          {userTweets === null ? (
             <div className="flex justify-center items-center h-full w-full">
               <div className="flex flex-col justify-center items-center">
                 <SlSpinner style={{ fontSize: "3rem" }} />

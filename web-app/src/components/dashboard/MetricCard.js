@@ -1,3 +1,4 @@
+import { SlBadge } from '@shoelace-style/shoelace/dist/react';
 import {React, useEffect, useRef, useState} from 'react'
 
 function MetricCard(props) {
@@ -22,8 +23,15 @@ function MetricCard(props) {
       {...attr}
     >
       <div className="relative flex items-center justify-between">
-        <div className="text-sm font-semibold text-black w-full dark:text-white">
+        <div className="text-sm font-semibold text-black w-full justify-between flex items-center">
           {title}
+          {
+            props.beta === "true" ? (
+              <SlBadge variant="warning" type="info">
+                Beta
+               </SlBadge>
+            ) : null
+          }
         </div>
       </div>
       <></>

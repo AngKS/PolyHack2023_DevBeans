@@ -21,7 +21,6 @@ const getBrowsingHistory = async (user_id) => {
     }
   }
   else {
-    console.log(data)
     if (data.length > 0) {
       return {
         statusCode: 200,
@@ -77,4 +76,56 @@ const readFullDatabase = async (tableName) => {
   }
 };
 
-export { readFullDatabase, getBrowsingHistory };
+const getUserInputMetrics = async (user_id) => {
+  const TABLE_NAME  = "User Recommended Text Table"
+  let { data, error } = await client
+    .from(TABLE_NAME)
+    .select("*")
+    .eq("user_id", user_id);
+  
+    console.log(data, error);
+
+  if (error) {
+    return {
+      statusCode: 400,
+      body: {
+        data: null,
+        payload: null,
+        percentage: 0
+      }
+    }
+  }
+  else {
+    // calculate percentage  = total number of userr input != null / total number of rows
+    let total = data.length
+    if (total === 0){
+      return {
+        statusCode: 200,
+        body: {
+          data: data,
+          payload: JSON.stringify(data),
+          percentage: 0
+      }
+    }
+  }
+    let count = 0
+    data.map((item) => {
+      if (item.text_accepted !== null){
+        count += 1
+      }
+    })
+    let percentage = (count / total) * 100
+    return {
+      statusCode: 200,
+      body: {
+        data: data,
+        payload: JSON.stringify(data),
+        percentage: percentage
+
+      }
+  }
+}
+
+}
+
+export { readFullDatabase, getBrowsingHistory, getUserInputMetrics };

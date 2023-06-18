@@ -16,6 +16,10 @@ MODEL_NAME = 'unitary/unbiased-toxic-roberta' # change this to your model
 tokenizer = AutoTokenizer.from_pretrained(MODEL_NAME)
 model = AutoModelForSequenceClassification.from_pretrained(MODEL_NAME)
 
+# MODEL_NAME2 = 'google/flan-t5-xxl'
+# tokenizer2 = AutoTokenizer.from_pretrained(MODEL_NAME2)
+# model2 = AutoModelForSequenceClassification.from_pretrained(MODEL_NAME2)
+
 def get_suggestions(sentence):
     response = openai.ChatCompletion.create(
       model="gpt-3.5-turbo",
@@ -95,6 +99,28 @@ def classify():
             'labels': predicted_labels
         }
 
+        
+        return jsonify(response)
+    
+@app.route('/get_topics', methods=['POST'])
+def get_topics():
+    if request.method == 'POST':
+        data = request.get_json()
+        text = data.get('inputs')
+        
+        # Ensure that a text was provided
+        if not text:
+            return jsonify({'error': 'no inputs provided'}), 400
+
+        inputs = tokenizer(text, return_tensors='pt', truncation=True, padding=True)
+        outputs = model(**inputs)
+
+        topics = outputs[0]["generated_text"].split(', ')
+
+        # Convert the prediction to a JSON response
+        response = {
+            'topics': topics
+        }
         
         return jsonify(response)
 

@@ -1,6 +1,8 @@
 let timeoutId = null;
 let maxElementWidth = window.innerWidth;
-const activeElement = document.activeElement;
+let currentElement = null
+
+
 const apiKey =
     "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InVpcHBua2hpanRxbXdud25ueXB6Iiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTY4NjM4ODMyNiwiZXhwIjoyMDAxOTY0MzI2fQ.6zRD9gLScuHIPy7k2R0F6z1jdY9wJcRN6esn0oF4DLk";
 
@@ -145,6 +147,8 @@ function updateButtonState(state, suggestions = []) {
         const textContainer = document.createElement("div");
         textContainer.classList.add("suggested_text_container");
 
+        let suggestionElement = currentElement
+
         // Create suggestion elements (for example, as list items in a dropdown)
         let suggestion_count = 1;
         suggestions.forEach((suggestion) => {
@@ -153,9 +157,16 @@ function updateButtonState(state, suggestions = []) {
             listItem.classList.add("suggested_lines");
 
             listItem.addEventListener("click", function () {
+                console.log("clicked suggestions: ", suggestion)
                 // Your onclick function code here
-                let originalText = activeElement.value;
-                activeElement.value = suggestion;
+                // let originalText = activeElement.value;
+                if (suggestionElement.getAttribute('contenteditable')) {
+                    suggestionElement.innerText = suggestion;
+                } else {
+                    // If the active element is an HTMLInputElement
+                    suggestionElement.value = suggestion;
+                }
+
                 overlayButton.style.display = "none";
                 overlayButton.innerHTML = "";
 
@@ -242,41 +253,11 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
     }
 });
 
-function captureUserInputs_() {
-    document.addEventListener("keydown", function (event) {
-        // Check if active element is an input field and if so, what type
-        if (activeElement instanceof HTMLInputElement) {
-            const inputType = activeElement.type;
-
-            // Check if the input field is for email, password, or username
-            if (
-                inputType === "email" ||
-                inputType === "password" ||
-                (inputType === "text" &&
-                    ["username", "user", "login"].includes(activeElement.name))
-            ) {
-                // If it is, don't show the overlay button and don't send a message
-                return;
-            }
-        }
-
-        const inputValue = activeElement.innerText || activeElement.value;
-
-        // Send a message to the background script
-        chrome.runtime.sendMessage({
-            action: "logInput",
-            inputValue: inputValue,
-        });
-
-        // Show the overlay button and position it
-        overlayButton.style.display = "block";
-        positionOverlayButton(activeElement);
-    });
-}
 
 function captureUserInputs() {
     document.addEventListener("keydown", function (event) {
         const activeElement = document.activeElement;
+        currentElement = activeElement;
 
         // Check if the activeElement is a div that has contenteditable attribute set to true
         if (activeElement.getAttribute('contenteditable')) {

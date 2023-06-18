@@ -48,7 +48,6 @@ const tableRow = (data, data_full, key) => {
 
 
 
-    console.log(url)
 
     if (site) {
       

@@ -362,7 +362,7 @@ const getTweetTopics = async (tweet) => {
 }
 
 const getTopicsSentiments = async (cleanedText) => {
-  return ["label1", true];
+  return ["Negative", true];
   const sentiments = await getTweetSentiments({ "text": cleanedText });
   const filteredLabels = sentiments.filter(output => output.score > 0.5).map(output => output.label);
   const isFlagged = filteredLabels.length > 0;

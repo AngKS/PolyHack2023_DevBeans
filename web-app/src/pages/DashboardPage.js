@@ -11,7 +11,7 @@ import TopicViewWidget from "../components/dashboard/TopicViewWidget";
 import CensoredDataWidget from "../components/dashboard/CensoredDataPieChart";
 import SmartWidget from "../components/dashboard/SmartWidget";
 import InputMetricsWidget from "../components/dashboard/InputMetricsWidget";
-import { getBrowsingHistory, readFullDatabase } from "../utils/databaseUtils";
+import { getBrowsingHistory, getUserInputMetrics, readFullDatabase } from "../utils/databaseUtils";
 import { SlBadge } from "@shoelace-style/shoelace/dist/react";
 
 function DashboardPage() {
@@ -43,6 +43,8 @@ function DashboardPage() {
   const [websiteVisited, setWebsiteVisited] = useState([]);
   const [loaded, setLoaded] = useState(false);
 
+  const [userInputMetrics, setUserInputMetrics] = useState(0);
+
   const getSession = async () => {
     let session = await supabaseClient?.auth?.getSession();
     if (session) {
@@ -53,7 +55,7 @@ function DashboardPage() {
     }
   }
 
-  const getData = async () => {
+  const getBrowsingData = async () => {
     // fetch database objects
   //  let {statusCode, body} = await getBrowsingHistory()
     if (user !== null){
@@ -82,11 +84,26 @@ function DashboardPage() {
 
   }
 
+  const userReccomendedTextsMetrics = async () => {
+    if (user !== null){
+      let {statusCode, body} = await getUserInputMetrics(user.uuid)
+
+      if (statusCode === 200){
+        console.log(body.data)
+        return setUserInputMetrics(body.percentage.toFixed(1))
+      }
+      else{
+        return setUserInputMetrics(0)
+      }
+    }
+  }
+
   useEffect(() => {
     // 👇️ scroll to top on page load
     window.scrollTo({ top: 0, left: 0, behavior: "smooth" });
 
-    getData();
+    getBrowsingData();
+    userReccomendedTextsMetrics();
 
     const header_height = document.getElementById("navbar").clientHeight;
     // get screenHeigh
@@ -107,7 +124,7 @@ function DashboardPage() {
         {/* top level insights/metrics */}
         <MetricCard
           title="Smart Recommendations"
-          beta={true}
+          beta="true"
           extra="px-6 lg:col-span-3 sm:auto-cols-auto row-span-1"
         >
 
@@ -144,7 +161,7 @@ function DashboardPage() {
           title="Your texts were"
           extra="px-6 lg:col-span-3 sm:auto-cols-auto row-span-1"
         >
-          <InputMetricsWidget recommended_phrases_used={41} />
+          <InputMetricsWidget recommended_phrases_used={userInputMetrics} />
         </MetricCard>
 
         {/* second tier metrics */}

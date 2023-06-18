@@ -16,13 +16,13 @@ Mindful Beans is a web application that allows users to track their web browsing
 
 
 ## Features
-[ ] Websites Visited metrics
-[ ] Most view site contents
-[ ] Censored content summary
-[ ] Censored word frequency
+- [ ] Websites Visited metrics
+- [ ] Most view site contents
+- [ ] Censored content summary
+- [ ] Censored word frequency
 
 ## Contributors
-- [Choon Wei]
+- [Choon Wei](www.github.com/choonwei0214)
 - [Kah Shin](www.github.com/angks)
 - [Kritchanat](www.github.com/kritp03)
 - [Ian](https://www.linkedin.com/in/ianchua0204/)

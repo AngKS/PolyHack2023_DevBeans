@@ -23,10 +23,10 @@ function MetricCard(props) {
       {...attr}
     >
       <div className="relative flex items-center justify-between">
-        <div className="text-sm font-semibold text-black w-full dark:text-white justify-between flex items-center">
+        <div className="text-sm font-semibold text-black w-full justify-between flex items-center">
           {title}
           {
-            props.beta ? (
+            props.beta === "true" ? (
               <SlBadge variant="warning" type="info">
                 Beta
                </SlBadge>

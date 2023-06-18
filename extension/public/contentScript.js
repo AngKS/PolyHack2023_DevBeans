@@ -453,7 +453,7 @@ const getTweetTopics = async (tweet) => {
 };
 
 const getTopicsSentiments = async (cleanedText) => {
-  return ["Negative", true];
+  // return ["Negative", true];
   const sentiments = await getTweetSentiments({ "text": cleanedText });
   const filteredLabels = sentiments.filter(output => output.score > 0.5).map(output => output.label);
   const isFlagged = filteredLabels.length > 0;
@@ -462,7 +462,7 @@ const getTopicsSentiments = async (cleanedText) => {
   \n\nContext: Answer in this format: [topic1, topic2, topic3, and so on] 
   
   \n\nAnswer:`;
-    const topics = await getTweetTopics({ inputs: prompt });
+    const topics = await getTweetTopics({ "inputs": prompt });
     console.log("TOPICS\n\n", topics);
     const topicsList = topics[0]["generated_text"].split(", ");
     chrome.storage.local.get(null, function (result) {

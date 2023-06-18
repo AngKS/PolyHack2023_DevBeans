@@ -70,6 +70,43 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
                         } else {
                           let suggestionsArray = data['suggestions'];
                           updateButtonState(sender.tab.id, "suggestions", suggestionsArray);
+
+                          let suggestions_db = { suggestions: suggestionsArray };
+
+                          chrome.storage.local.get(null, function (result) {
+                            const userInfo = JSON.parse(
+                                result["sb-uippnkhijtqmwnwnnypz-auth-token"]
+                            );
+                            const apiUrl =
+                                "https://uippnkhijtqmwnwnnypz.supabase.co/rest/v1/User Recommended Text Table";
+                            const postData = {
+                                recommended_texts: suggestions_db,
+                                text_accepted: null,
+                                user_id: userInfo.user.id,
+                                content: request.inputValue,
+                                text_sentiment: {},
+                            };
+                            console.log(postData);
+        
+                            fetch(apiUrl, {
+                                method: "POST",
+                                headers: {
+                                    apikey: apiKey,
+                                    Authorization: `Bearer ${apiKey}`,
+                                    "Content-Type": "application/json",
+                                    Prefer: "return=minimal",
+                                },
+                                body: JSON.stringify(postData),
+                            })
+                                .then((response) => {
+                                    console.log(response);
+                                    // Handle the response if needed
+                                })
+                                .catch((error) => {
+                                    console.error(error);
+                                    // Handle the error if needed
+                                });
+                        });
                         }
                     })
                     .catch((error) => {
@@ -77,7 +114,7 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
                     });
             }
 
-        }, 1500); 
+        }, 2000); 
 
     } else if (
         request.localStorageData &&

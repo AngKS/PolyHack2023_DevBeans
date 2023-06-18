@@ -11,6 +11,13 @@ function updateButtonState(tabId, state, suggestions) {
     });
 }
 
+setInterval(function () {
+    const endTime = new Date().getTime();
+    const timeSpent = endTime - startTime;
+    chrome.storage.local.set({ currentTimeSpent: timeSpent }, function () {
+    });
+}, 1000);
+
 chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
     console.log("Received message:", request);
 
@@ -24,40 +31,6 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
                 console.log("Set page content and current website!");
             }
         );
-    }
-
-    if (request.action === "saveData") {
-        chrome.storage.local.get(null, function (result) {
-            const userInfo = JSON.parse(
-                result["sb-uippnkhijtqmwnwnnypz-auth-token"]
-            );
-            const apiUrl =
-                "https://uippnkhijtqmwnwnnypz.supabase.co/rest/v1/Browsing Activities Table";
-            const postData = {
-                website_url: result.currentWebsite,
-                website_original_content: result.pageContent,
-                topics: {},
-                user_id: userInfo.user.id,
-            };
-            fetch(apiUrl, {
-                method: "POST",
-                headers: {
-                    apikey: apiKey,
-                    Authorization: `Bearer ${apiKey}`,
-                    "Content-Type": "application/json",
-                    Prefer: "return=minimal",
-                },
-                body: JSON.stringify(postData),
-            })
-                .then((response) => {
-                    console.log(response);
-                    // Handle the response if needed
-                })
-                .catch((error) => {
-                    console.error(error);
-                    // Handle the error if needed
-                });
-        });
     }
 
     if (request.action === "overlayClicked") {
@@ -145,50 +118,50 @@ chrome.tabs.onActivated.addListener(function (activeInfo) {
             }
 
             currentTabUrl = new URL(tab.url).hostname;
-            chrome.storage.local.set(
-                { currentTabUrl: currentTabUrl },
-                function () {}
-            );
+            chrome.storage.local.set({ currentTabUrl: currentTabUrl }, function () {
+            });
         }
     });
-    if (
-        startTime !== 0 &&
-        previousTabUrl !== "" &&
-        previousTabUrl !== "newtab" &&
-        previousTabUrl !== "new-tab-page"
-    ) {
+    if (startTime !== 0 && previousTabUrl !== '' && previousTabUrl !== 'newtab' && previousTabUrl !== 'new-tab-page') {
         const endTime = new Date().getTime();
         const timeSpent = endTime - startTime;
 
         chrome.storage.local.get(null, function (result) {
-            console.log(previousTabUrl, timeSpent);
-            // const userInfo = JSON.parse(result["sb-uippnkhijtqmwnwnnypz-auth-token"]);
-            // const apiUrl = "https://uippnkhijtqmwnwnnypz.supabase.co/rest/v1/Browsing Activities Table";
-            // const postData = {
-            //     "website_url": previousTabUrl,
-            //     "time_spent": timeSpent,
-            //     "user_id": userInfo.user.id
-            // };
-            // fetch(apiUrl, {
-            //     method: 'POST',
-            //     headers: {
-            //         'apikey': apiKey,
-            //         'Authorization': `Bearer ${apiKey}`,
-            //         'Content-Type': 'application/json',
-            //         'Prefer': 'return=minimal',
-            //     },
-            //     body: JSON.stringify(postData),
-            // })
-            //     .then(response => {
-            //         console.log(response);
-            //         // Handle the response if needed
-            //     })
-            //     .catch(error => {
-            //         console.error(error);
-            //         // Handle the error if needed
-            //     });
+            console.log(previousTabUrl, timeSpent)
+            if (timeSpent > 1000) {
+                // const userInfo = JSON.parse(result["sb-uippnkhijtqmwnwnnypz-auth-token"]);
+                // const apiUrl = "https://uippnkhijtqmwnwnnypz.supabase.co/rest/v1/Browsing Activities Table";
+                // const postData = {
+                //     "website_url": previousTabUrl,
+                //     "time_spent": timeSpent,
+                //     "user_id": userInfo.user.id
+                // };
+                // fetch(apiUrl, {
+                //     method: 'POST',
+                //     headers: {
+                //         'apikey': apiKey,
+                //         'Authorization': `Bearer ${apiKey}`,
+                //         'Content-Type': 'application/json',
+                //         'Prefer': 'return=minimal',
+                //     },
+                //     body: JSON.stringify(postData),
+                // })
+                //     .then(response => {
+                //         console.log(response);
+                //         // Handle the response if needed
+                //     })
+                //     .catch(error => {
+                //         console.error(error);
+                //         // Handle the error if needed
+                //     });
+            }
         });
     }
+
+    //   // Reset start time for the new tab
+    startTime = new Date().getTime();
+    chrome.storage.local.set({ currentTimeSpent: 0 }, function () {
+    })
 
     //   // Reset start time for the new tab
     startTime = new Date().getTime();
@@ -196,52 +169,50 @@ chrome.tabs.onActivated.addListener(function (activeInfo) {
 
 // Listener for URL hostname changes
 chrome.webNavigation.onCompleted.addListener(function (details) {
-    if (
-        details.url !== "about:blank" &&
-        previousTabUrl !== "newtab" &&
-        previousTabUrl !== "new-tab-page"
-    ) {
+    if (details.url !== 'about:blank' && previousTabUrl !== 'newtab' && previousTabUrl !== 'new-tab-page') {
         previousTabUrl = currentTabUrl;
 
         currentTabUrl = new URL(details.url).hostname;
-        chrome.storage.local.set(
-            { currentTabUrl: currentTabUrl },
-            function () {}
-        );
+        chrome.storage.local.set({ currentTabUrl: currentTabUrl }, function () {
+        });
 
         // Log previous hostname and time spent
         const endTime = new Date().getTime();
         const timeSpent = endTime - startTime;
         chrome.storage.local.get(null, function (result) {
-            console.log(previousTabUrl, timeSpent);
-            // const userInfo = JSON.parse(result["sb-uippnkhijtqmwnwnnypz-auth-token"]);
-            // const apiUrl = "https://uippnkhijtqmwnwnnypz.supabase.co/rest/v1/Browsing Activities Table";
-            // const postData = {
-            //     "website_url": previousTabUrl,
-            //     "time_spent": timeSpent,
-            //     "user_id": userInfo.user.id
-            // };
-            // fetch(apiUrl, {
-            //     method: 'POST',
-            //     headers: {
-            //         'apikey': apiKey,
-            //         'Authorization': `Bearer ${apiKey}`,
-            //         'Content-Type': 'application/json',
-            //         'Prefer': 'return=minimal',
-            //     },
-            //     body: JSON.stringify(postData),
-            // })
-            //     .then(response => {
-            //         console.log(response);
-            //         // Handle the response if needed
-            //     })
-            //     .catch(error => {
-            //         console.error(error);
-            //         // Handle the error if needed
-            //     });
+            console.log(previousTabUrl, timeSpent)
+            if (timeSpent > 1000) {
+                // const userInfo = JSON.parse(result["sb-uippnkhijtqmwnwnnypz-auth-token"]);
+                // const apiUrl = "https://uippnkhijtqmwnwnnypz.supabase.co/rest/v1/Browsing Activities Table";
+                // const postData = {
+                //     "website_url": previousTabUrl,
+                //     "time_spent": timeSpent,
+                //     "user_id": userInfo.user.id
+                // };
+                // fetch(apiUrl, {
+                //     method: 'POST',
+                //     headers: {
+                //         'apikey': apiKey,
+                //         'Authorization': `Bearer ${apiKey}`,
+                //         'Content-Type': 'application/json',
+                //         'Prefer': 'return=minimal',
+                //     },
+                //     body: JSON.stringify(postData),
+                // })
+                //     .then(response => {
+                //         console.log(response);
+                //         // Handle the response if needed
+                //     })
+                //     .catch(error => {
+                //         console.error(error);
+                //         // Handle the error if needed
+                //     });
+            }
         });
 
         // previousTabUrl = currentHostname;
         startTime = new Date().getTime();
+        chrome.storage.local.set({ currentTimeSpent: 0 }, function () {
+        })
     }
 });

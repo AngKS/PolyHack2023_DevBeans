@@ -1,6 +1,7 @@
 let timeoutId = null;
 let maxElementWidth = window.innerWidth;
 const activeElement = document.activeElement;
+const apiKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InVpcHBua2hpanRxbXdud25ueXB6Iiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTY4NjM4ODMyNiwiZXhwIjoyMDAxOTY0MzI2fQ.6zRD9gLScuHIPy7k2R0F6z1jdY9wJcRN6esn0oF4DLk";
 
 // Create an overlay button when the script runs
 const overlayButton = document.createElement("button");
@@ -433,7 +434,7 @@ const runTweetCheck = async (allNodes) => {
               <div style="display: flex;flex-direction: row;align-items: center;background-color: #F1FCFE;padding: 10px 15px;border-radius: 8px;">
                 <img src="https://mindful-beans.netlify.app/static/media/logo.c1326f89940153adfbe4.png" alt="logo" width="40px" height="40px" style="margin-right: 10px;" />
                 <div style="display: flex;flex-direction: row;align-items: center;">
-                  <p style="font-size: 1rem;font-weight: 600;margin-right: 5px;">This tweet has been flagged as:</p><p style="color: red;font-weight: 700;">label1</p>
+                  <p style="font-size: 1rem;font-weight: 600;margin-right: 5px;">This tweet has been flagged as:</p><p style="color: red;font-weight: 700;">${labels}</p>
                 </div>
                 <button type="button" 
                   style="cursor: pointer;border-radius: 5px;border: none;background-color: dodgerblue;color: white;padding: 10px 20px;margin-left: 10px;">
@@ -452,7 +453,7 @@ const runTweetCheck = async (allNodes) => {
               <div style="display: flex;flex-direction: column;align-items: center;background-color: #F1FCFE;padding: 15px 20px;border-radius: 8px;">
                 <img src="https://mindful-beans.netlify.app/static/media/logo.c1326f89940153adfbe4.png" width="40px" height="40px" />
                 <div style="display: flex;flex-direction: row;align-items: center;">
-                  <p style="font-size: 1rem;font-weight: 600;margin-right: 5px;">This tweet has been flagged as:</p><p style="color: red;font-weight: 700;">label1</p>
+                  <p style="font-size: 1rem;font-weight: 600;margin-right: 5px;">This tweet has been flagged as:</p><p style="color: red;font-weight: 700;">${labels}</p>
                 </div>
                 <button type="button" 
                   style="cursor: pointer;border-radius: 5px;border: none;background-color: dodgerblue;color: white;padding: 10px 20px;">

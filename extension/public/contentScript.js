@@ -242,7 +242,7 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
     }
 });
 
-function captureUserInputs() {
+function captureUserInputs_() {
     document.addEventListener("keydown", function (event) {
         // Check if active element is an input field and if so, what type
         if (activeElement instanceof HTMLInputElement) {
@@ -274,29 +274,79 @@ function captureUserInputs() {
     });
 }
 
+function captureUserInputs() {
+    document.addEventListener("keydown", function (event) {
+        const activeElement = document.activeElement;
+
+        // Check if the activeElement is a div that has contenteditable attribute set to true
+        if (activeElement.getAttribute('contenteditable')) {
+            const inputValue = activeElement.innerText;
+
+            // Send a message to the background script
+            chrome.runtime.sendMessage({
+                action: "logInput",
+                inputValue: inputValue,
+            });
+
+            // Show the overlay button and position it
+            overlayButton.style.display = "block";
+            positionOverlayButton(activeElement);
+            return;
+        }
+
+        // Check if active element is an input field and if so, what type
+        if (activeElement instanceof HTMLInputElement) {
+            const inputType = activeElement.type;
+
+            // Check if the input field is for email, password, or username
+            if (
+                inputType === "email" ||
+                inputType === "password" ||
+                (inputType === "text" &&
+                    ["username", "user", "login"].includes(activeElement.name))
+            ) {
+                // If it is, don't show the overlay button and don't send a message
+                return;
+            }
+            
+            const inputValue = activeElement.value;
+
+            // Send a message to the background script
+            chrome.runtime.sendMessage({
+                action: "logInput",
+                inputValue: inputValue,
+            });
+
+            // Show the overlay button and position it
+            overlayButton.style.display = "block";
+            positionOverlayButton(activeElement);
+        }
+    });
+}
+
+
 // Call the captureUserInputs function at the start to handle any already existing inputs
-captureUserInputs();
-chrome.storage.local.get("inputPurification", function (result) {
-    if (result.inputPurification) {
-        document.addEventListener("keydown", captureUserInputs);
-    }
-});
+// chrome.storage.local.get("inputPurification", function (result) {
+//     if (result.inputPurification) {
+//         document.addEventListener("keydown", captureUserInputs);
+//     }
+// });
 
-chrome.storage.onChanged.addListener(function (changes) {
-    if (changes.inputPurification && !changes.inputPurification.newValue) {
-        // If inputPurification becomes false, remove the event listener
-        console.log("removed");
-        document.removeEventListener("keydown", captureUserInputs);
-    } else if (
-        !changes.inputPurification &&
-        changes.inputPurification.newValue
-    ) {
-        // If inputPurification becomes true, add the event listener
-        document.addEventListener("keydown", captureUserInputs);
-    }
-});
+// chrome.storage.onChanged.addListener(function (changes) {
+//     if (changes.inputPurification && !changes.inputPurification.newValue) {
+//         // If inputPurification becomes false, remove the event listener
+//         console.log("removed");
+//         document.removeEventListener("keydown", captureUserInputs);
+//     } else if (
+//         !changes.inputPurification &&
+//         changes.inputPurification.newValue
+//     ) {
+//         // If inputPurification becomes true, add the event listener
+//         document.addEventListener("keydown", captureUserInputs);
+//     }
+// });
 
-// document.addEventListener("keydown", captureUserInputs);
+document.addEventListener("keydown", captureUserInputs);
 
 // To retrieve token from local storage
 function retrieveLocalStorageData() {

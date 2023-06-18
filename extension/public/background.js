@@ -54,7 +54,7 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
                 let data = {
                     text: request.inputValue,
                 };
-
+                
                 fetch('http://13.212.238.35:5000/predict', {
                     method: "POST",
                     headers: {

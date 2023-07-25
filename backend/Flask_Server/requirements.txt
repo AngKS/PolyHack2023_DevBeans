@@ -14,7 +14,7 @@ bce-python-sdk==0.8.74
 beautifulsoup4==4.12.2
 bleach==6.0.0
 cachetools==5.3.1
-certifi==2023.5.7
+certifi==2023.7.22
 cffi==1.15.1
 charset-normalizer @ file:///home/conda/feedstock_root/build_artifacts/charset-normalizer_1678108872112/work
 click @ file:///D:/bld/click_1666798499870/work

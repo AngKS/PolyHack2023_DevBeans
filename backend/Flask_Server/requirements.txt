@@ -153,7 +153,7 @@ tokenizers==0.12.1
 torch==2.0.1
 torchaudio==2.0.2
 torchvision==0.15.2
-tornado==6.3.2
+tornado==6.3.3
 tqdm @ file:///home/conda/feedstock_root/build_artifacts/tqdm_1677948868469/work
 traitlets==5.9.0
 transformers==4.22.1
